@@ -1,0 +1,446 @@
+body,
+html {
+  background-color: #333;
+  margin: auto;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+  color: #fff;
+}
+
+.wrapper {
+  width: 400px;
+  border-radius: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+}
+
+@media only screen and (max-width: 800px) {
+  .wrapper {
+    width: 80%;
+  }
+}
+
+/** form */
+.wrapper>header {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.input-box {
+  position: relative;
+  width: 100%;
+}
+
+.input-box>input {
+  width: 100%;
+  background-color: #dedede;
+  border-radius: 100px;
+  padding: 10px 100px 10px 20px;
+  line-height: 1;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  color: #333;
+}
+
+.input-box>button {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  bottom: 3px;
+  border: 0;
+  background: linear-gradient(135deg, #3925e8, #1dccc9);
+  color: #fff;
+  outline: none;
+  margin: 0;
+  padding: 0 10px;
+  border-radius: 100px;
+  z-index: 2;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.input-box>button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(57, 37, 232, 0.3);
+}
+
+/** list */
+.wrapper>ul {
+  padding: 0px;
+  list-style: none;
+  margin: 0;
+}
+
+.wrapper>ul>li {
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.wrapper>ul>li:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #999;
+}
+
+.wrapper>ul>li>.left {
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wrapper>ul>li>.left>button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.wrapper>ul>li>.left>button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.wrapper>ul>li>.center {
+  flex: 1;
+  margin: 0 10px;
+  word-wrap: break-word;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.wrapper>ul>li>.center.strike {
+  text-decoration-line: line-through;
+  text-decoration-thickness: 2px;
+  text-decoration-color: #f60c0c;
+  opacity: 0.6;
+}
+
+.wrapper>ul>li>.right {
+  display: flex;
+  flex-direction: row;
+  width: 140px;
+  gap: 4px;
+}
+
+.wrapper>ul>li>.right>span {
+  width: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper>ul>li>.right>span>button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wrapper>ul>li>.right>span>button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.wrapper>ul>li>.right>span>button:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+
+.wrapper>ul>li>.right>span>button:disabled:hover {
+  background: none;
+  transform: none;
+}
+
+/* Header dengan logo di tengah */
+.header-centered {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Styling untuk logo */
+.logo-image {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Counter task dengan box oval */
+.task-counter {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+}
+
+.task-counter span {
+  background: linear-gradient(135deg, #3925e8, #1dccc9);
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 45px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Filter buttons - Updated untuk bentuk kotak melengkung */
+.input-box {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+  /* atau 30px untuk jarak lebih besar */
+}
+
+.filter-container {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filter-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #b0b0b0;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 1;
+}
+
+.filter-btn:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e0e0e0;
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, #3925e8, #1dccc9);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(57, 37, 232, 0.4);
+  transform: translateY(-1px);
+}
+
+.filter-btn:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.filter-btn:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+/* Edit input styling */
+.edit-input {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.edit-input:focus {
+  border-color: #3925e8;
+  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 2px rgba(57, 37, 232, 0.2);
+}
+
+.edit-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Edit buttons container */
+.edit-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  justify-content: flex-end;
+}
+
+.edit-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 60px;
+}
+
+.edit-btn.save {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: #fff;
+}
+
+.edit-btn.save:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.edit-btn.cancel {
+  background: rgba(255, 255, 255, 0.1);
+  color: #b0b0b0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.edit-btn.cancel:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+/* Responsive untuk mobile */
+@media (max-width: 768px) {
+  .logo-image {
+    max-width: 250px;
+  }
+
+  .wrapper>ul>li {
+    padding: 8px;
+  }
+
+  .wrapper>ul>li>.center {
+    font-size: 13px;
+  }
+
+  .wrapper>ul>li>.right {
+    width: 120px;
+  }
+
+  .wrapper>ul>li>.right>span>button {
+    padding: 4px;
+  }
+
+  .filter-container {
+    padding: 3px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-image {
+    max-width: 200px;
+  }
+
+  .wrapper>ul>li {
+    padding: 6px;
+    flex-wrap: wrap;
+  }
+
+  .wrapper>ul>li>.center {
+    font-size: 12px;
+    min-width: 120px;
+  }
+
+  .wrapper>ul>li>.right {
+    width: 100px;
+    gap: 2px;
+  }
+
+  .wrapper>ul>li>.right>span>button {
+    padding: 3px;
+  }
+
+  .filter-btn {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .edit-buttons {
+    gap: 6px;
+  }
+
+  .edit-btn {
+    padding: 5px 10px;
+    font-size: 11px;
+    min-width: 50px;
+  }
+}
+
+/* Scrollbar styling untuk webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #3925e8, #1dccc9);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #2d1bb8, #16a8a5);
+}
+
+/* Animation untuk smooth transitions */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.wrapper>ul>li {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+/* Focus states untuk accessibility */
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #3925e8;
+  outline-offset: 2px;
+}
+
+/* Loading state jika diperlukan */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
