@@ -1,12 +1,6 @@
 body,
 html {
-  --dark-bg: linear-gradient(135deg, #0a0a0a, #1a1a2e, #32004e 80%, #070044 100%);
-  --dark-text: #e9ecef;
-  --dark-primary: #4cc9f0;
-  --dark-secondary: #3a0ca3;
-  --dark-card: rgba(30, 30, 46, 0.7);
-  --dark-shadow: rgba(0, 0, 0, 0.3);
-  --dark-accent: #ff1c2f;
+  background-color: #333;
   margin: auto;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 16px;
