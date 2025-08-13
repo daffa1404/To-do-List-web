@@ -32,15 +32,17 @@ function ToDoList(props) {
     }
   };
 
-  // Function untuk check apakah task bisa di-move
+  // FIXED: Function untuk check apakah task bisa di-move berdasarkan filtered tasks
   const canMoveUp = (taskId) => {
-    const currentIndex = props.allTasks.findIndex((task) => task.id === taskId);
+    // Cari index berdasarkan filtered tasks yang sedang ditampilkan
+    const currentIndex = props.tasks.findIndex((task) => task.id === taskId);
     return currentIndex > 0;
   };
 
   const canMoveDown = (taskId) => {
-    const currentIndex = props.allTasks.findIndex((task) => task.id === taskId);
-    return currentIndex < props.allTasks.length - 1;
+    // Cari index berdasarkan filtered tasks yang sedang ditampilkan  
+    const currentIndex = props.tasks.findIndex((task) => task.id === taskId);
+    return currentIndex < props.tasks.length - 1;
   };
 
   // Function untuk handle click pada completed task
@@ -61,6 +63,16 @@ function ToDoList(props) {
     startEditing(item.id, item.task);
   };
 
+  // Function untuk handle move button - Cek batas berdasarkan filtered tasks
+  const handleMoveClick = (taskId, direction) => {
+    // Hanya panggil move jika task bisa dipindah berdasarkan filtered list
+    if (direction === "up" && canMoveUp(taskId)) {
+      props.move(taskId, direction);
+    } else if (direction === "down" && canMoveDown(taskId)) {
+      props.move(taskId, direction);
+    }
+  };
+
   // Jika tidak ada task yang tersedia
   if (props.tasks.length === 0) {
     return (
@@ -74,7 +86,12 @@ function ToDoList(props) {
               textAlign: "center",
             }}
           >
-            Tidak ada task yang tersedia
+            {props.currentFilter === "active" 
+              ? "Tidak ada task aktif" 
+              : props.currentFilter === "completed"
+              ? "Tidak ada task yang selesai"
+              : "Tidak ada task yang tersedia"
+            }
           </li>
         </ul>
       </div>
@@ -161,23 +178,28 @@ function ToDoList(props) {
             <div className="right">
               {editingId !== item.id && (
                 <>
-                  {/* Move Up Button */}
+                  {/* Move Up Button - Disabled untuk task paling atas di filtered list */}
                   <span>
                     <button
                       type="button"
-                      onClick={() =>
-                        canMoveUp(item.id) && props.move(item.id, "up")
-                      }
+                      onClick={() => handleMoveClick(item.id, "up")}
                       disabled={!canMoveUp(item.id)}
-                      aria-label="Move task up"
-                      style={{ opacity: !canMoveUp(item.id) ? 0.3 : 1 }}
+                      aria-label={
+                        canMoveUp(item.id) 
+                          ? "Move task up" 
+                          : "Cannot move up"
+                      }
+                      style={{ 
+                        opacity: !canMoveUp(item.id) ? 0.3 : 1,
+                        cursor: !canMoveUp(item.id) ? "not-allowed" : "pointer"
+                      }}
                     >
                       <svg
                         width="16"
                         height="16"
                         viewBox="0 0 24 24"
                         fill="none"
-                        stroke="#17a2b8"
+                        stroke={!canMoveUp(item.id) ? "#666" : "#17a2b8"}
                         strokeWidth="2"
                       >
                         <polyline points="18,15 12,9 6,15" />
@@ -185,23 +207,28 @@ function ToDoList(props) {
                     </button>
                   </span>
 
-                  {/* Move Down Button */}
+                  {/* Move Down Button - Disabled untuk task paling bawah di filtered list */}
                   <span>
                     <button
                       type="button"
-                      onClick={() =>
-                        canMoveDown(item.id) && props.move(item.id, "down")
-                      }
+                      onClick={() => handleMoveClick(item.id, "down")}
                       disabled={!canMoveDown(item.id)}
-                      aria-label="Move task down"
-                      style={{ opacity: !canMoveDown(item.id) ? 0.3 : 1 }}
+                      aria-label={
+                        canMoveDown(item.id) 
+                          ? "Move task down" 
+                          : "Cannot move down"
+                      }
+                      style={{ 
+                        opacity: !canMoveDown(item.id) ? 0.3 : 1,
+                        cursor: !canMoveDown(item.id) ? "not-allowed" : "pointer"
+                      }}
                     >
                       <svg
                         width="16"
                         height="16"
                         viewBox="0 0 24 24"
                         fill="none"
-                        stroke="#17a2b8"
+                        stroke={!canMoveDown(item.id) ? "#666" : "#17a2b8"}
                         strokeWidth="2"
                       >
                         <polyline points="6,9 12,15 18,9" />

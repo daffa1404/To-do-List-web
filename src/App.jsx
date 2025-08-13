@@ -569,16 +569,8 @@ function App() {
     );
   }
 
-  // FIXED MOVE FUNCTION - Task completed tidak bisa dipindah
+  // FIXED MOVE FUNCTION - Menggunakan posisi di original tasks
   function move(taskId, direction) {
-    const task = tasks.find((item) => item.id === taskId);
-    
-    // Jika task sudah completed, tidak bisa dipindah
-    if (task && task.completed) {
-      showAlert("Task yang sudah selesai tidak dapat dipindah lagi");
-      return;
-    }
-
     const currentIndex = tasks.findIndex((task) => task.id === taskId);
     const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
 

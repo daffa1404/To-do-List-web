@@ -155,7 +155,7 @@ html {
   justify-content: center;
 }
 
-.wrapper>ul>li>.right>span>button:hover:not(:disabled) {
+.wrapper>ul>li>.right>span>button:hover {
   background: rgba(255, 255, 255, 0.1);
   transform: translateY(-1px);
 }
