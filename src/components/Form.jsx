@@ -3,7 +3,7 @@ function Form(props) {
     <div className="wrapper">
       <header className="header-centered">
         <img
-          src="/src/img/logotodolist.png"
+          src="/logotodolist.png"
           alt="TodoList App Logo"
           className="logo-image"
         />
