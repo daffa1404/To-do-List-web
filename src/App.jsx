@@ -569,8 +569,16 @@ function App() {
     );
   }
 
-  // FIXED MOVE FUNCTION - Menggunakan ID bukan index
+  // FIXED MOVE FUNCTION - Task completed tidak bisa dipindah
   function move(taskId, direction) {
+    const task = tasks.find((item) => item.id === taskId);
+    
+    // Jika task sudah completed, tidak bisa dipindah
+    if (task && task.completed) {
+      showAlert("Task yang sudah selesai tidak dapat dipindah lagi");
+      return;
+    }
+
     const currentIndex = tasks.findIndex((task) => task.id === taskId);
     const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
 
@@ -613,6 +621,7 @@ function App() {
         remove={remove}
         editTask={editTask}
         showAlert={showAlert}
+        currentFilter={currentFilter} // Pass current filter to ToDoList
       />
 
       {/* Custom Alert */}
