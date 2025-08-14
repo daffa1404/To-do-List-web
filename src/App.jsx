@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import Form from "./components/Form";
 import ToDoList from "./components/ToDoList";
+import DeleteAllButton from "./components/DeleteAllButton";
 
 // Custom Alert Component
 const CustomAlert = ({
@@ -505,6 +506,10 @@ function App() {
     return true; // 'all' filter
   });
 
+  // Check if there are active tasks for delete all button
+  const hasActiveTasks = tasks.some(task => !task.completed);
+  const hasTasks = tasks.length > 0;
+
   useEffect(() => {
     localStorage.setItem(STORAGE, JSON.stringify(tasks));
     const complete = tasks.filter((item) => item.completed === true).length;
@@ -595,6 +600,25 @@ function App() {
     });
   }
 
+  // NEW DELETE ALL FUNCTION
+  function deleteAll() {
+    const activeTasksCount = tasks.filter(task => !task.completed).length;
+    
+    if (activeTasksCount === 0) {
+      showAlert("Tidak ada task aktif yang dapat dihapus");
+      return;
+    }
+
+    const message = activeTasksCount === 1 
+      ? "Yakin akan menghapus 1 task aktif?" 
+      : `Yakin akan menghapus ${activeTasksCount} task aktif?`;
+
+    showConfirm(message, () => {
+      // Hanya hapus task yang belum completed
+      setTasks(tasks.filter((item) => item.completed));
+    });
+  }
+
   return (
     <>
       <Form
@@ -605,6 +629,7 @@ function App() {
         currentFilter={currentFilter}
         setCurrentFilter={setCurrentFilter}
       />
+      
       <ToDoList
         tasks={filteredTasks}
         allTasks={tasks} // Pass original tasks untuk checking move boundaries
@@ -614,6 +639,12 @@ function App() {
         editTask={editTask}
         showAlert={showAlert}
         currentFilter={currentFilter} // Pass current filter to ToDoList
+      />
+
+      <DeleteAllButton 
+        onDeleteAll={deleteAll}
+        hasActiveTasks={hasActiveTasks}
+        hasTasks={hasTasks}
       />
 
       {/* Custom Alert */}

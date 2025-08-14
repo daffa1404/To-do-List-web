@@ -32,17 +32,15 @@ function ToDoList(props) {
     }
   };
 
-  // FIXED: Function untuk check apakah task bisa di-move berdasarkan filtered tasks
+  // Function untuk check apakah task bisa di-move berdasarkan all tasks (original order)
   const canMoveUp = (taskId) => {
-    // Cari index berdasarkan filtered tasks yang sedang ditampilkan
-    const currentIndex = props.tasks.findIndex((task) => task.id === taskId);
+    const currentIndex = props.allTasks.findIndex((task) => task.id === taskId);
     return currentIndex > 0;
   };
 
   const canMoveDown = (taskId) => {
-    // Cari index berdasarkan filtered tasks yang sedang ditampilkan  
-    const currentIndex = props.tasks.findIndex((task) => task.id === taskId);
-    return currentIndex < props.tasks.length - 1;
+    const currentIndex = props.allTasks.findIndex((task) => task.id === taskId);
+    return currentIndex < props.allTasks.length - 1;
   };
 
   // Function untuk handle click pada completed task
@@ -63,9 +61,8 @@ function ToDoList(props) {
     startEditing(item.id, item.task);
   };
 
-  // Function untuk handle move button - Cek batas berdasarkan filtered tasks
+  // Function untuk handle move button
   const handleMoveClick = (taskId, direction) => {
-    // Hanya panggil move jika task bisa dipindah berdasarkan filtered list
     if (direction === "up" && canMoveUp(taskId)) {
       props.move(taskId, direction);
     } else if (direction === "down" && canMoveDown(taskId)) {
@@ -178,7 +175,7 @@ function ToDoList(props) {
             <div className="right">
               {editingId !== item.id && (
                 <>
-                  {/* Move Up Button - Disabled untuk task paling atas di filtered list */}
+                  {/* Move Up Button */}
                   <span>
                     <button
                       type="button"
@@ -189,10 +186,6 @@ function ToDoList(props) {
                           ? "Move task up" 
                           : "Cannot move up"
                       }
-                      style={{ 
-                        opacity: !canMoveUp(item.id) ? 0.3 : 1,
-                        cursor: !canMoveUp(item.id) ? "not-allowed" : "pointer"
-                      }}
                     >
                       <svg
                         width="16"
@@ -207,7 +200,7 @@ function ToDoList(props) {
                     </button>
                   </span>
 
-                  {/* Move Down Button - Disabled untuk task paling bawah di filtered list */}
+                  {/* Move Down Button */}
                   <span>
                     <button
                       type="button"
@@ -218,10 +211,6 @@ function ToDoList(props) {
                           ? "Move task down" 
                           : "Cannot move down"
                       }
-                      style={{ 
-                        opacity: !canMoveDown(item.id) ? 0.3 : 1,
-                        cursor: !canMoveDown(item.id) ? "not-allowed" : "pointer"
-                      }}
                     >
                       <svg
                         width="16"
@@ -236,16 +225,12 @@ function ToDoList(props) {
                     </button>
                   </span>
 
-                  {/* Edit Button - Disabled untuk completed tasks */}
+                  {/* Edit Button */}
                   <span>
                     <button
                       type="button"
                       onClick={() => handleEditButtonClick(item)}
                       aria-label={item.completed ? "Cannot edit completed task" : "Edit task"}
-                      style={{ 
-                        opacity: item.completed ? 0.3 : 1,
-                        cursor: item.completed ? "not-allowed" : "pointer"
-                      }}
                       disabled={item.completed}
                     >
                       <svg
