@@ -90,7 +90,6 @@ const CustomAlert = ({
             animation: "slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
           }}
         >
-          {/* Glow effect */}
           <div
             style={{
               position: "absolute",
@@ -106,7 +105,6 @@ const CustomAlert = ({
             }}
           />
 
-          {/* Header */}
           <div
             style={{
               display: "flex",
@@ -154,7 +152,6 @@ const CustomAlert = ({
             </h3>
           </div>
 
-          {/* Message */}
           <p
             style={{
               color: "#b8c5d1",
@@ -168,7 +165,6 @@ const CustomAlert = ({
             {message}
           </p>
 
-          {/* Button */}
           <button
             onClick={onClose}
             style={{
@@ -289,7 +285,6 @@ const CustomConfirm = ({
             animation: "slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
           }}
         >
-          {/* Glow effect */}
           <div
             style={{
               position: "absolute",
@@ -305,7 +300,6 @@ const CustomConfirm = ({
             }}
           />
 
-          {/* Header */}
           <div
             style={{
               display: "flex",
@@ -354,7 +348,6 @@ const CustomConfirm = ({
             </h3>
           </div>
 
-          {/* Message */}
           <p
             style={{
               color: "#b8c5d1",
@@ -368,9 +361,7 @@ const CustomConfirm = ({
             {message}
           </p>
 
-          {/* Buttons */}
           <div style={{ display: "flex", gap: "12px" }}>
-            {/* Cancel Button */}
             <button
               onClick={onCancel}
               style={{
@@ -398,7 +389,6 @@ const CustomConfirm = ({
               Cancel
             </button>
 
-            {/* OK/Delete Button */}
             <button
               onClick={onConfirm}
               style={{
@@ -506,8 +496,7 @@ function App() {
     return true; // 'all' filter
   });
 
-  // Check if there are active tasks for delete all button
-  const hasActiveTasks = tasks.some(task => !task.completed);
+  // Check if there are tasks for delete all button
   const hasTasks = tasks.length > 0;
 
   useEffect(() => {
@@ -536,20 +525,17 @@ function App() {
       completed: false,
     };
     newTask.current.value = "";
-    setTasks([data, ...tasks]); // Menambahkan task baru di awal array
+    setTasks([data, ...tasks]);
   }
 
-  // ENHANCED setCompleted function - Task yang sudah complete tidak bisa diubah lagi
   function setCompleted(id) {
     const task = tasks.find((item) => item.id === id);
     
-    // Jika task sudah completed, tidak bisa diubah lagi
     if (task && task.completed) {
       showAlert("Task yang sudah selesai tidak dapat diubah statusnya lagi");
       return;
     }
 
-    // Jika task belum completed, bisa diubah menjadi completed
     setTasks(
       tasks.map((item) =>
         item.id === id ? { ...item, completed: !item.completed } : item
@@ -557,11 +543,9 @@ function App() {
     );
   }
 
-  // ENHANCED editTask function - Task yang sudah complete tidak bisa diedit
   function editTask(id, newTaskText) {
     const task = tasks.find((item) => item.id === id);
     
-    // Jika task sudah completed, tidak bisa diedit
     if (task && task.completed) {
       showAlert("Task yang sudah selesai tidak dapat diedit lagi");
       return;
@@ -574,18 +558,13 @@ function App() {
     );
   }
 
-  // FIXED MOVE FUNCTION - Menggunakan posisi di original tasks
   function move(taskId, direction) {
     const currentIndex = tasks.findIndex((task) => task.id === taskId);
     const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
 
-    // Validasi batas
     if (newIndex < 0 || newIndex >= tasks.length) return;
 
-    // Buat copy array baru
     const newTasks = [...tasks];
-
-    // Tukar posisi
     [newTasks[currentIndex], newTasks[newIndex]] = [
       newTasks[newIndex],
       newTasks[currentIndex],
@@ -600,22 +579,29 @@ function App() {
     });
   }
 
-  // NEW DELETE ALL FUNCTION
+  // FIXED DELETE ALL FUNCTION - Now deletes ALL tasks (active + completed)
   function deleteAll() {
-    const activeTasksCount = tasks.filter(task => !task.completed).length;
-    
-    if (activeTasksCount === 0) {
-      showAlert("Tidak ada task aktif yang dapat dihapus");
+    if (tasks.length === 0) {
+      showAlert("Tidak ada task yang dapat dihapus");
       return;
     }
 
-    const message = activeTasksCount === 1 
-      ? "Yakin akan menghapus 1 task aktif?" 
-      : `Yakin akan menghapus ${activeTasksCount} task aktif?`;
+    const totalTasks = tasks.length;
+    const activeTasks = tasks.filter(task => !task.completed).length;
+    const completedTasks = tasks.filter(task => task.completed).length;
+
+    let message = "";
+    if (activeTasks > 0 && completedTasks > 0) {
+      message = `Yakin akan menghapus semua ${totalTasks} task (${activeTasks} aktif + ${completedTasks} selesai)?`;
+    } else if (activeTasks > 0) {
+      message = totalTasks === 1 ? "Yakin akan menghapus 1 task aktif?" : `Yakin akan menghapus ${totalTasks} task aktif?`;
+    } else {
+      message = totalTasks === 1 ? "Yakin akan menghapus 1 task yang selesai?" : `Yakin akan menghapus ${totalTasks} task yang selesai?`;
+    }
 
     showConfirm(message, () => {
-      // Hanya hapus task yang belum completed
-      setTasks(tasks.filter((item) => item.completed));
+      // Delete ALL tasks (both active and completed)
+      setTasks([]);
     });
   }
 
@@ -632,22 +618,20 @@ function App() {
       
       <ToDoList
         tasks={filteredTasks}
-        allTasks={tasks} // Pass original tasks untuk checking move boundaries
+        allTasks={tasks}
         setCompleted={setCompleted}
         move={move}
         remove={remove}
         editTask={editTask}
         showAlert={showAlert}
-        currentFilter={currentFilter} // Pass current filter to ToDoList
+        currentFilter={currentFilter}
       />
 
       <DeleteAllButton 
         onDeleteAll={deleteAll}
-        hasActiveTasks={hasActiveTasks}
         hasTasks={hasTasks}
       />
 
-      {/* Custom Alert */}
       <CustomAlert
         isOpen={alertConfig.isOpen}
         message={alertConfig.message}
@@ -655,7 +639,6 @@ function App() {
         onClose={closeAlert}
       />
 
-      {/* Custom Confirm */}
       <CustomConfirm
         isOpen={confirmConfig.isOpen}
         message={confirmConfig.message}

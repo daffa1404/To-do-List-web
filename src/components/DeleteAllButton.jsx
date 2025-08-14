@@ -1,25 +1,22 @@
-function DeleteAllButton({ onDeleteAll, hasActiveTasks, hasTasks }) {
+function DeleteAllButton({ onDeleteAll, hasTasks }) {
   // Jangan tampilkan tombol jika tidak ada task sama sekali
   if (!hasTasks) {
     return null;
   }
 
   const handleClick = () => {
-    if (hasActiveTasks) {
-      onDeleteAll();
-    }
+    onDeleteAll();
   };
 
   return (
     <div className="delete-all-container">
       <button
         type="button"
-        className={`delete-all-btn ${!hasActiveTasks ? 'disabled' : ''}`}
+        className="delete-all-btn"
         onClick={handleClick}
-        disabled={!hasActiveTasks}
-        aria-label={hasActiveTasks ? "Delete all active tasks" : "No active tasks to delete"}
+        aria-label="Delete all tasks"
       >
-        Delete all
+        Delete All
       </button>
     </div>
   );
