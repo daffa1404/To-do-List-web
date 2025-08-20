@@ -496,8 +496,17 @@ function App() {
     return true; // 'all' filter
   });
 
-  // Check if there are tasks for delete all button
-  const hasTasks = tasks.length > 0;
+  // Check if there are tasks for delete all button based on current filter
+  const getFilteredTasksCount = () => {
+    if (currentFilter === "active") {
+      return tasks.filter(task => !task.completed).length;
+    } else if (currentFilter === "completed") {
+      return tasks.filter(task => task.completed).length;
+    }
+    return tasks.length; // 'all' filter
+  };
+
+  const hasTasks = getFilteredTasksCount() > 0;
 
   useEffect(() => {
     localStorage.setItem(STORAGE, JSON.stringify(tasks));
@@ -579,30 +588,77 @@ function App() {
     });
   }
 
-  // FIXED DELETE ALL FUNCTION - Now deletes ALL tasks (active + completed)
+  // SMART DELETE ALL FUNCTION - Context aware based on current filter
   function deleteAll() {
-    if (tasks.length === 0) {
+    const activeTasks = tasks.filter(task => !task.completed);
+    const completedTasks = tasks.filter(task => task.completed);
+
+    // Check if there are any tasks to delete based on current filter
+    if (currentFilter === "active" && activeTasks.length === 0) {
+      showAlert("Tidak ada task aktif yang dapat dihapus");
+      return;
+    }
+    
+    if (currentFilter === "completed" && completedTasks.length === 0) {
+      showAlert("Tidak ada task yang selesai untuk dihapus");
+      return;
+    }
+
+    if (currentFilter === "all" && tasks.length === 0) {
       showAlert("Tidak ada task yang dapat dihapus");
       return;
     }
 
-    const totalTasks = tasks.length;
-    const activeTasks = tasks.filter(task => !task.completed).length;
-    const completedTasks = tasks.filter(task => task.completed).length;
-
+    // Generate confirmation message based on current filter
     let message = "";
-    if (activeTasks > 0 && completedTasks > 0) {
-      message = `Yakin akan menghapus semua ${totalTasks} task (${activeTasks} aktif + ${completedTasks} selesai)?`;
-    } else if (activeTasks > 0) {
-      message = totalTasks === 1 ? "Yakin akan menghapus 1 task aktif?" : `Yakin akan menghapus ${totalTasks} task aktif?`;
-    } else {
-      message = totalTasks === 1 ? "Yakin akan menghapus 1 task yang selesai?" : `Yakin akan menghapus ${totalTasks} task yang selesai?`;
+    let deleteAction = null;
+
+    if (currentFilter === "active") {
+      const count = activeTasks.length;
+      message = count === 1 
+        ? "Yakin akan menghapus 1 task aktif?" 
+        : `Yakin akan menghapus ${count} task aktif?`;
+      
+      deleteAction = () => {
+        // Keep only completed tasks
+        setTasks(completedTasks);
+      };
+    } 
+    else if (currentFilter === "completed") {
+      const count = completedTasks.length;
+      message = count === 1 
+        ? "Yakin akan menghapus 1 task yang selesai?" 
+        : `Yakin akan menghapus ${count} task yang selesai?`;
+      
+      deleteAction = () => {
+        // Keep only active tasks
+        setTasks(activeTasks);
+      };
+    } 
+    else { // "all" filter
+      const totalTasks = tasks.length;
+      const activeCount = activeTasks.length;
+      const completedCount = completedTasks.length;
+
+      if (activeCount > 0 && completedCount > 0) {
+        message = `Yakin akan menghapus semua ${totalTasks} task (${activeCount} aktif + ${completedCount} selesai)?`;
+      } else if (activeCount > 0) {
+        message = totalTasks === 1 
+          ? "Yakin akan menghapus 1 task aktif?" 
+          : `Yakin akan menghapus ${totalTasks} task aktif?`;
+      } else {
+        message = totalTasks === 1 
+          ? "Yakin akan menghapus 1 task yang selesai?" 
+          : `Yakin akan menghapus ${totalTasks} task yang selesai?`;
+      }
+
+      deleteAction = () => {
+        // Delete ALL tasks
+        setTasks([]);
+      };
     }
 
-    showConfirm(message, () => {
-      // Delete ALL tasks (both active and completed)
-      setTasks([]);
-    });
+    showConfirm(message, deleteAction);
   }
 
   return (
@@ -630,6 +686,8 @@ function App() {
       <DeleteAllButton 
         onDeleteAll={deleteAll}
         hasTasks={hasTasks}
+        currentFilter={currentFilter}
+        tasksCount={getFilteredTasksCount()}
       />
 
       <CustomAlert

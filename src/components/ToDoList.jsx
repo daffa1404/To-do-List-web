@@ -32,15 +32,15 @@ function ToDoList(props) {
     }
   };
 
-  // Function untuk check apakah task bisa di-move berdasarkan all tasks (original order)
+  // FIXED: Function untuk check apakah task bisa di-move berdasarkan filtered tasks
   const canMoveUp = (taskId) => {
-    const currentIndex = props.allTasks.findIndex((task) => task.id === taskId);
+    const currentIndex = props.tasks.findIndex((task) => task.id === taskId);
     return currentIndex > 0;
   };
 
   const canMoveDown = (taskId) => {
-    const currentIndex = props.allTasks.findIndex((task) => task.id === taskId);
-    return currentIndex < props.allTasks.length - 1;
+    const currentIndex = props.tasks.findIndex((task) => task.id === taskId);
+    return currentIndex < props.tasks.length - 1;
   };
 
   // Function untuk handle click pada completed task
@@ -61,13 +61,23 @@ function ToDoList(props) {
     startEditing(item.id, item.task);
   };
 
-  // Function untuk handle move button
+  // FIXED: Function untuk handle move button dengan logika yang benar
   const handleMoveClick = (taskId, direction) => {
-    if (direction === "up" && canMoveUp(taskId)) {
-      props.move(taskId, direction);
-    } else if (direction === "down" && canMoveDown(taskId)) {
-      props.move(taskId, direction);
+    // Dapatkan index dari filtered tasks (current view)
+    const filteredIndex = props.tasks.findIndex((task) => task.id === taskId);
+    
+    // Tentukan target task ID berdasarkan filtered view
+    let targetTaskId;
+    if (direction === "up" && filteredIndex > 0) {
+      targetTaskId = props.tasks[filteredIndex - 1].id;
+    } else if (direction === "down" && filteredIndex < props.tasks.length - 1) {
+      targetTaskId = props.tasks[filteredIndex + 1].id;
+    } else {
+      return; // Tidak bisa move
     }
+
+    // Panggil move function dengan task ID yang akan ditukar posisinya
+    props.move(taskId, direction);
   };
 
   // Jika tidak ada task yang tersedia
@@ -98,7 +108,7 @@ function ToDoList(props) {
   return (
     <div className="wrapper">
       <ul>
-        {props.tasks.map((item) => (
+        {props.tasks.map((item, index) => (
           <li key={item.id}>
             <div className="left">
               <button
@@ -175,16 +185,16 @@ function ToDoList(props) {
             <div className="right">
               {editingId !== item.id && (
                 <>
-                  {/* Move Up Button */}
+                  {/* FIXED: Move Up Button - berdasarkan filtered view */}
                   <span>
                     <button
                       type="button"
                       onClick={() => handleMoveClick(item.id, "up")}
-                      disabled={!canMoveUp(item.id)}
+                      disabled={index === 0} // Disabled jika di posisi pertama dalam filtered view
                       aria-label={
-                        canMoveUp(item.id) 
-                          ? "Move task up" 
-                          : "Cannot move up"
+                        index === 0 
+                          ? "Cannot move up (first item)" 
+                          : "Move task up"
                       }
                     >
                       <svg
@@ -192,7 +202,7 @@ function ToDoList(props) {
                         height="16"
                         viewBox="0 0 24 24"
                         fill="none"
-                        stroke={!canMoveUp(item.id) ? "#666" : "#17a2b8"}
+                        stroke={index === 0 ? "#666" : "#17a2b8"}
                         strokeWidth="2"
                       >
                         <polyline points="18,15 12,9 6,15" />
@@ -200,16 +210,16 @@ function ToDoList(props) {
                     </button>
                   </span>
 
-                  {/* Move Down Button */}
+                  {/* FIXED: Move Down Button - berdasarkan filtered view */}
                   <span>
                     <button
                       type="button"
                       onClick={() => handleMoveClick(item.id, "down")}
-                      disabled={!canMoveDown(item.id)}
+                      disabled={index === props.tasks.length - 1} // Disabled jika di posisi terakhir dalam filtered view
                       aria-label={
-                        canMoveDown(item.id) 
-                          ? "Move task down" 
-                          : "Cannot move down"
+                        index === props.tasks.length - 1
+                          ? "Cannot move down (last item)" 
+                          : "Move task down"
                       }
                     >
                       <svg
@@ -217,7 +227,7 @@ function ToDoList(props) {
                         height="16"
                         viewBox="0 0 24 24"
                         fill="none"
-                        stroke={!canMoveDown(item.id) ? "#666" : "#17a2b8"}
+                        stroke={index === props.tasks.length - 1 ? "#666" : "#17a2b8"}
                         strokeWidth="2"
                       >
                         <polyline points="6,9 12,15 18,9" />
