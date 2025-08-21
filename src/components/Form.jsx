@@ -1,4 +1,34 @@
 function Form(props) {
+  // Function untuk handle context menu (right-click) pada logo
+  const handleLogoContextMenu = (e) => {
+    e.preventDefault();
+    return false;
+  };
+
+  // Function untuk handle drag start pada logo
+  const handleLogoDragStart = (e) => {
+    e.preventDefault();
+    return false;
+  };
+
+  // Function untuk handle select start pada logo
+  const handleLogoSelectStart = (e) => {
+    e.preventDefault();
+    return false;
+  };
+
+  // Function untuk handle mouse down pada logo
+  const handleLogoMouseDown = (e) => {
+    e.preventDefault();
+    return false;
+  };
+
+  // Function untuk handle touch start pada mobile
+  const handleLogoTouchStart = (e) => {
+    e.preventDefault();
+    return false;
+  };
+
   return (
     <div className="wrapper">
       <header className="header-centered">
@@ -6,6 +36,18 @@ function Form(props) {
           src="/logotodolist.png"
           alt="TodoList App Logo"
           className="logo-image"
+          
+          // Desktop Protection Events
+          onContextMenu={handleLogoContextMenu}
+          onDragStart={handleLogoDragStart}
+          onSelectStart={handleLogoSelectStart}
+          onMouseDown={handleLogoMouseDown}
+          
+          // Mobile Protection Events
+          onTouchStart={handleLogoTouchStart}
+          
+          // HTML Attributes
+          draggable={false}
         />
         <div className="task-counter">
           <span>

@@ -180,7 +180,7 @@ html {
   margin-bottom: 20px;
 }
 
-/* Styling untuk logo */
+/* Styling untuk logo dengan protection dari right-click */
 .logo-image {
   max-width: 300px;
   width: 100%;
@@ -189,6 +189,25 @@ html {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  
+  /* Protection dari right-click dan select */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  
+  /* Disable drag */
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  
+  /* Mobile Protection - iOS & Android */
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  
+  /* Touch action untuk mobile */
+  touch-action: none;
 }
 
 /* Counter task dengan box oval */
