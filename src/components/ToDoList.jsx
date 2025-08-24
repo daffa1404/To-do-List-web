@@ -32,7 +32,7 @@ function ToDoList(props) {
     }
   };
 
-  // FIXED: Function untuk check apakah task bisa di-move berdasarkan filtered tasks
+  // Function untuk check apakah task bisa di-move berdasarkan filtered tasks
   const canMoveUp = (taskId) => {
     const currentIndex = props.tasks.findIndex((task) => task.id === taskId);
     return currentIndex > 0;
@@ -61,7 +61,7 @@ function ToDoList(props) {
     startEditing(item.id, item.task);
   };
 
-  // FIXED: Function untuk handle move button dengan logika yang benar
+  // Function untuk handle move button dengan logika yang benar
   const handleMoveClick = (taskId, direction) => {
     // Dapatkan index dari filtered tasks (current view)
     const filteredIndex = props.tasks.findIndex((task) => task.id === taskId);
@@ -80,6 +80,29 @@ function ToDoList(props) {
     props.move(taskId, direction);
   };
 
+  // Function to get empty message based on current state
+  const getEmptyMessage = () => {
+    if (props.searchQuery && props.searchQuery.trim() !== "") {
+      // If there's a search query but no results
+      if (props.currentFilter === "active") {
+        return `No active tasks found for "${props.searchQuery}"`;
+      } else if (props.currentFilter === "completed") {
+        return `No completed tasks found for "${props.searchQuery}"`;
+      } else {
+        return `No tasks found for "${props.searchQuery}"`;
+      }
+    } else {
+      // If no search query, show regular empty messages
+      if (props.currentFilter === "active") {
+        return "Tidak ada task aktif";
+      } else if (props.currentFilter === "completed") {
+        return "Tidak ada task yang selesai";
+      } else {
+        return "Tidak ada task yang tersedia";
+      }
+    }
+  };
+
   // Jika tidak ada task yang tersedia
   if (props.tasks.length === 0) {
     return (
@@ -93,12 +116,7 @@ function ToDoList(props) {
               textAlign: "center",
             }}
           >
-            {props.currentFilter === "active" 
-              ? "Tidak ada task aktif" 
-              : props.currentFilter === "completed"
-              ? "Tidak ada task yang selesai"
-              : "Tidak ada task yang tersedia"
-            }
+            {getEmptyMessage()}
           </li>
         </ul>
       </div>
@@ -185,7 +203,7 @@ function ToDoList(props) {
             <div className="right">
               {editingId !== item.id && (
                 <>
-                  {/* FIXED: Move Up Button - berdasarkan filtered view */}
+                  {/* Move Up Button - berdasarkan filtered view */}
                   <span>
                     <button
                       type="button"
@@ -210,7 +228,7 @@ function ToDoList(props) {
                     </button>
                   </span>
 
-                  {/* FIXED: Move Down Button - berdasarkan filtered view */}
+                  {/* Move Down Button - berdasarkan filtered view */}
                   <span>
                     <button
                       type="button"

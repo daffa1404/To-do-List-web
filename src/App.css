@@ -401,6 +401,476 @@ html {
   color: #fff;
 }
 
+/* ========== SEARCH AND PROGRESS BAR COMBINED STYLES ========== */
+.search-progress-container {
+  width: 400px;
+  margin: 0 auto 15px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+@media only screen and (max-width: 800px) {
+  .search-progress-container {
+    width: 80%;
+  }
+}
+
+/* ========== SEARCH BAR STYLES ========== */
+.search-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+/* Search container variables */
+.search-wrapper {
+  --search-input-w: 100%;
+  --search-input-h: 45px;
+  --search-radius: 8px;
+  --search-frame-w: calc(100% + 4px);
+  --search-frame-h: calc(var(--search-input-h) + 4px);
+  --search-frame2-w: calc(100% + 8px);
+  --search-frame2-h: calc(var(--search-input-h) + 8px);
+  --search-bg: #121212;
+}
+
+/* Utility: for accessible label */
+.visually-hidden {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px,1px,1px,1px);
+  white-space: nowrap;
+}
+
+/* Search container centered */
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+/* Positioning reference for layers */
+.search-main {
+  position: relative;
+  width: var(--search-input-w);
+  height: var(--search-input-h);
+}
+
+/* Search Input */
+.search-input {
+  background-color: #010201;
+  border: none;
+  width: var(--search-input-w);
+  height: var(--search-input-h);
+  border-radius: var(--search-radius);
+  color: white;
+  padding-inline: 45px 45px;
+  font-size: 14px;
+  position: relative;
+  z-index: 3;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.search-input::placeholder {
+  color: #c0b9c0;
+  font-size: 14px;
+}
+
+.search-input:focus {
+  outline: 2px solid #2b2752;
+  outline-offset: 0;
+}
+
+/* Search Masks */
+.search-input-mask {
+  pointer-events: none;
+  width: 80px;
+  height: 16px;
+  position: absolute;
+  background: linear-gradient(90deg, transparent, black);
+  top: 15px;
+  left: 55px;
+  z-index: 4;
+}
+
+.search-main:focus-within > .search-input-mask {
+  display: none;
+}
+
+.search-pink-mask {
+  pointer-events: none;
+  width: 25px;
+  height: 16px;
+  position: absolute;
+  background: #cf30aa;
+  top: 8px;
+  left: 4px;
+  filter: blur(15px);
+  opacity: 0.8;
+  transition: opacity 0.4s ease;
+  z-index: 2;
+}
+
+.search-main:hover > .search-pink-mask {
+  opacity: 0;
+}
+
+/* Search Icons */
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 12px;
+  z-index: 4;
+}
+
+.search-clear-icon {
+  position: absolute;
+  top: 13px;
+  right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  cursor: pointer;
+  color: #b0b0b0;
+  transition: all 0.3s ease;
+}
+
+.search-clear-icon:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.search-clear-icon:focus-visible {
+  outline: 2px solid #6356d8;
+  outline-offset: 2px;
+}
+
+/* Search Filter border ring */
+.search-filterBorder {
+  height: 32px;
+  width: 32px;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 3;
+}
+
+.search-filterBorder::before {
+  content: "";
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(90deg);
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  filter: brightness(1.35);
+  background-image: conic-gradient(
+    rgba(0, 0, 0, 0),
+    #3d3a4f,
+    rgba(0, 0, 0, 0) 50%,
+    rgba(0, 0, 0, 0) 50%,
+    #3d3a4f,
+    rgba(0, 0, 0, 0) 100%
+  );
+  animation: rotate 4s linear infinite;
+}
+
+/* Search Layered gradient frames (behind input) */
+.search-white,
+.search-border,
+.search-darkBorderBg,
+.search-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  border-radius: 10px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.search-white,
+.search-border,
+.search-darkBorderBg {
+  width: var(--search-frame-w);
+  height: var(--search-frame-h);
+  filter: blur(2px);
+  max-width: calc(100% + 8px);
+  max-height: 53px;
+}
+
+.search-white {
+  filter: blur(1.5px);
+  max-width: calc(100% + 6px);
+  max-height: 50px;
+}
+
+.search-white::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(83deg);
+  width: 400px;
+  height: 400px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  filter: brightness(1.4);
+  background-image: conic-gradient(
+    rgba(0, 0, 0, 0) 0%,
+    #a099d8,
+    rgba(0, 0, 0, 0) 8%,
+    rgba(0, 0, 0, 0) 50%,
+    #dfa2da,
+    rgba(0, 0, 0, 0) 58%
+  );
+  transition: transform 2s ease;
+}
+
+.search-border {
+  filter: blur(0.3px);
+  max-width: calc(100% + 4px);
+  max-height: 48px;
+}
+
+.search-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(70deg);
+  width: 400px;
+  height: 400px;
+  filter: brightness(1.3);
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-image: conic-gradient(
+    #1c191c,
+    #2f91b5 5%,
+    #1c191c 14%,
+    #1c191c 50%,
+    #e4e3e3 60%,
+    #1c191c 64%
+  );
+  transition: transform 2s ease;
+}
+
+.search-darkBorderBg {
+  max-width: calc(100% + 7px);
+  max-height: 52px;
+}
+
+.search-darkBorderBg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(82deg);
+  width: 400px;
+  height: 400px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-image: conic-gradient(
+    rgba(0, 0, 0, 0),
+    #115d6a,
+    rgba(0, 0, 0, 0) 10%,
+    rgba(0, 0, 0, 0) 50%,
+    #d7d5d6,
+    rgba(0, 0, 0, 0) 60%
+  );
+  transition: transform 2s ease;
+}
+
+/* Search Glow layer larger than frames */
+.search-glow {
+  width: var(--search-frame2-w);
+  height: var(--search-frame2-h);
+  filter: blur(20px);
+  opacity: 0.4;
+  max-width: calc(100% + 12px);
+  max-height: 65px;
+}
+
+.search-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(60deg);
+  width: 600px;
+  height: 600px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-image: conic-gradient(
+    #000,
+    #2fa1b5 5%,
+    #000 38%,
+    #000 50%,
+    #ffffff 60%,
+    #000 87%
+  );
+  transition: transform 2s ease;
+}
+
+/* Search Interactions: hover */
+.search-container:hover > .search-darkBorderBg::before {
+  transform: translate(-50%, -50%) rotate(262deg);
+}
+.search-container:hover > .search-glow::before {
+  transform: translate(-50%, -50%) rotate(240deg);
+}
+.search-container:hover > .search-white::before {
+  transform: translate(-50%, -50%) rotate(263deg);
+}
+.search-container:hover > .search-border::before {
+  transform: translate(-50%, -50%) rotate(250deg);
+}
+
+/* Search Interactions: focus within (keyboard focus on input) */
+.search-container:focus-within > .search-darkBorderBg::before {
+  transform: translate(-50%, -50%) rotate(442deg);
+  transition: transform 4s ease;
+}
+.search-container:focus-within > .search-glow::before {
+  transform: translate(-50%, -50%) rotate(420deg);
+  transition: transform 4s ease;
+}
+.search-container:focus-within > .search-white::before {
+  transform: translate(-50%, -50%) rotate(443deg);
+  transition: transform 4s ease;
+}
+.search-container:focus-within > .search-border::before {
+  transform: translate(-50%, -50%) rotate(430deg);
+  transition: transform 4s ease;
+}
+
+/* ========== PROGRESS BAR STYLES - COMPACT VERSION ========== */
+.progress-wrapper {
+  flex-shrink: 0;
+  width: 140px;
+}
+
+.progress-container {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.progress-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.3px;
+}
+
+.progress-percentage {
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(135deg, #3925e8, #1dccc9);
+  padding: 2px 6px;
+  border-radius: 8px;
+  min-width: 30px;
+  text-align: center;
+}
+
+.progress-bar-container {
+  margin-bottom: 6px;
+}
+
+.progress-bar-background {
+  width: 100%;
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(135deg, #3925e8, #1dccc9);
+  border-radius: 8px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shine 2s infinite;
+}
+
+@keyframes shine {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.progress-stats {
+  text-align: center;
+}
+
+.progress-stats-text {
+  font-size: 10px;
+  color: #b0b0b0;
+  font-weight: 500;
+}
+
+/* Search Animations */
+@keyframes rotate {
+  100% {
+    transform: translate(-50%, -50%) rotate(450deg);
+  }
+}
+
 /* Responsive untuk mobile */
 @media (max-width: 768px) {
   .logo-image {
@@ -433,6 +903,48 @@ html {
   .delete-all-btn {
     padding: 6px 12px;
     font-size: 11px;
+  }
+
+  .search-progress-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .search-wrapper {
+    width: 100%;
+  }
+
+  .progress-wrapper {
+    width: 100%;
+  }
+
+  .progress-container {
+    padding: 10px;
+  }
+
+  .progress-text {
+    font-size: 12px;
+  }
+
+  .progress-percentage {
+    font-size: 11px;
+  }
+
+  .search-input {
+    font-size: 13px;
+    padding-inline: 40px 40px;
+  }
+
+  .search-input::placeholder {
+    font-size: 13px;
+  }
+
+  .search-icon {
+    left: 12px;
+  }
+
+  .search-clear-icon {
+    right: 12px;
   }
 }
 
@@ -479,6 +991,37 @@ html {
   .delete-all-btn {
     padding: 5px 10px;
     font-size: 10px;
+  }
+
+  .progress-text {
+    font-size: 11px;
+  }
+
+  .progress-percentage {
+    font-size: 10px;
+  }
+
+  .progress-stats-text {
+    font-size: 9px;
+  }
+
+  .search-input {
+    font-size: 12px;
+    padding-inline: 35px 35px;
+  }
+
+  .search-input::placeholder {
+    font-size: 12px;
+  }
+
+  .search-icon {
+    left: 10px;
+  }
+
+  .search-clear-icon {
+    right: 10px;
+    width: 18px;
+    height: 18px;
   }
 }
 

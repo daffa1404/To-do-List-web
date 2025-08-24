@@ -3,6 +3,7 @@ import "./App.css";
 import Form from "./components/Form";
 import ToDoList from "./components/ToDoList";
 import DeleteAllButton from "./components/DeleteAllButton";
+import SearchProgressBar from "./components/SearchBar"; // Fixed import path
 
 // Custom Alert Component
 const CustomAlert = ({
@@ -432,6 +433,7 @@ function App() {
 
   const [taskCompleted, setTaskCompleted] = useState(0);
   const [currentFilter, setCurrentFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Alert state
   const [alertConfig, setAlertConfig] = useState({
@@ -486,15 +488,28 @@ function App() {
     setConfirmConfig((prev) => ({ ...prev, isOpen: false }));
   };
 
-  // Filter tasks based on current filter
-  const filteredTasks = tasks.filter((task) => {
-    if (currentFilter === "active") {
-      return !task.completed;
-    } else if (currentFilter === "completed") {
-      return task.completed;
+  // Filter and search tasks
+  const getFilteredAndSearchedTasks = () => {
+    let filtered = tasks.filter((task) => {
+      if (currentFilter === "active") {
+        return !task.completed;
+      } else if (currentFilter === "completed") {
+        return task.completed;
+      }
+      return true; // 'all' filter
+    });
+
+    // Apply search filter
+    if (searchQuery.trim() !== "") {
+      filtered = filtered.filter((task) =>
+        task.task.toLowerCase().includes(searchQuery.toLowerCase())
+      );
     }
-    return true; // 'all' filter
-  });
+
+    return filtered;
+  };
+
+  const filteredTasks = getFilteredAndSearchedTasks();
 
   // Check if there are tasks for delete all button based on current filter
   const getFilteredTasksCount = () => {
@@ -507,6 +522,9 @@ function App() {
   };
 
   const hasTasks = getFilteredTasksCount() > 0;
+
+  // Calculate progress percentage
+  const progressPercentage = tasks.length > 0 ? Math.round((taskCompleted / tasks.length) * 100) : 0;
 
   useEffect(() => {
     localStorage.setItem(STORAGE, JSON.stringify(tasks));
@@ -671,6 +689,15 @@ function App() {
         currentFilter={currentFilter}
         setCurrentFilter={setCurrentFilter}
       />
+
+      <SearchProgressBar
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        currentFilter={currentFilter}
+        completed={taskCompleted}
+        total={tasks.length}
+        percentage={progressPercentage}
+      />
       
       <ToDoList
         tasks={filteredTasks}
@@ -681,6 +708,7 @@ function App() {
         editTask={editTask}
         showAlert={showAlert}
         currentFilter={currentFilter}
+        searchQuery={searchQuery}
       />
 
       <DeleteAllButton 
