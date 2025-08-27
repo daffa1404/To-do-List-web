@@ -281,60 +281,160 @@ html {
   border-bottom-right-radius: 8px;
 }
 
-/* Delete All Button Styles - FIXED POSITION */
-.delete-all-container {
-  width: 400px;
-  margin: 20px auto 0;
+/* ========== FLOATING DELETE ALL BUTTON STYLES ========== */
+.delete-all-floating {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+  animation: floatIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  
+  /* Mobile touch improvements */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.delete-all-floating-btn {
   display: flex;
-  justify-content: flex-end;
-  padding-right: 0px;
-}
-
-@media only screen and (max-width: 800px) {
-  .delete-all-container {
-    width: 80%;
-  }
-}
-
-.delete-all-btn {
+  align-items: center;
+  gap: 10px;
   background: linear-gradient(135deg, #dc3545, #c82333);
   border: none;
   color: #fff;
-  padding: 8px 16px;
-  border-radius: 12px;
-  font-size: 12px;
+  padding: 14px 18px;
+  border-radius: 50px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   letter-spacing: 0.3px;
   text-transform: none;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+  box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-width: 60px;
+  max-width: 250px;
+  
+  /* Mobile optimizations */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  min-height: 48px; /* Minimum touch target size for accessibility */
 }
 
-.delete-all-btn:hover:not(.disabled) {
-  background: linear-gradient(135deg, #e74c3c, #c0392b);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.4);
+/* Desktop hover effects */
+@media (hover: hover) and (pointer: fine) {
+  .delete-all-floating-btn:hover {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 35px rgba(220, 53, 69, 0.6);
+  }
 }
 
-.delete-all-btn.disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  background: #666;
-  color: #999;
+/* Mobile and touch device interactions */
+@media (hover: none) or (pointer: coarse) {
+  .delete-all-floating-btn:active {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    transform: scale(0.95);
+    box-shadow: 0 2px 10px rgba(220, 53, 69, 0.6);
+  }
+  
+  /* Prevent double-tap zoom on mobile */
+  .delete-all-floating-btn {
+    touch-action: manipulation;
+    -ms-touch-action: manipulation;
+  }
 }
 
-.delete-all-btn.disabled:hover {
-  transform: none;
-  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
-  background: #666;
+.delete-all-floating-btn:active {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
 }
 
-.delete-all-btn:active:not(.disabled) {
-  transform: translateY(0);
+/* Delete text - responsive visibility */
+.delete-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity 0.3s ease;
+}
+
+/* Floating animation */
+@keyframes floatIn {
+  0% {
+    transform: translateY(100px) scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(-10px) scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Subtle floating animation */
+.delete-all-floating-btn {
+  animation: subtleFloat 6s ease-in-out infinite;
+}
+
+@keyframes subtleFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.delete-all-floating-btn:hover {
+  animation: none;
+}
+
+/* Pulse effect for attention */
+.delete-all-floating-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  z-index: -1;
+  animation: pulse 3s infinite;
+  opacity: 0.6;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+}
+
+/* OLD DELETE ALL CONTAINER - REMOVE THESE STYLES */
+.delete-all-container {
+  display: none; /* Hide the old container */
+}
+
+.delete-all-btn {
+  display: none; /* Hide the old button */
 }
 
 /* Edit input styling */
@@ -909,11 +1009,6 @@ html {
     padding: 3px;
   }
 
-  .delete-all-btn {
-    padding: 6px 12px;
-    font-size: 11px;
-  }
-
   .search-progress-container {
     flex-direction: column;
     gap: 10px;
@@ -960,7 +1055,47 @@ html {
 
   .search-input-mask {
     width: 40px;
-    left: 70px; /* Adjusted for mobile */
+    left: 70px;
+  }
+
+  /* Mobile floating delete button adjustments */
+  .delete-all-floating {
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .delete-all-floating-btn {
+    padding: 14px 16px;
+    font-size: 13px;
+    max-width: 220px;
+    min-height: 50px; /* Larger touch target */
+    gap: 8px;
+  }
+
+  /* Show abbreviated text on tablet */
+  .delete-text {
+    display: block;
+    max-width: 140px;
+  }
+}
+
+/* Medium mobile screens */
+@media (max-width: 640px) {
+  .delete-all-floating {
+    bottom: 16px;
+    right: 16px;
+  }
+
+  .delete-all-floating-btn {
+    padding: 12px 14px;
+    font-size: 12px;
+    max-width: 180px;
+    min-height: 48px;
+  }
+
+  .delete-text {
+    max-width: 100px;
+    font-size: 11px;
   }
 }
 
@@ -1004,9 +1139,216 @@ html {
     min-width: 50px;
   }
 
-  .delete-all-btn {
-    padding: 5px 10px;
+  .progress-text {
+    font-size: 11px;
+  }
+
+  .progress-percentage {
     font-size: 10px;
+  }
+
+  .progress-stats-text {
+    font-size: 9px;
+  }
+
+  .search-input {
+    font-size: 12px;
+    padding-inline: 35px 35px;
+  }
+
+  .search-input::placeholder {
+    font-size: 12px;
+  }
+
+  .search-icon {
+    left: 12px;
+  }
+
+  .search-clear-icon {
+    right: 12px;
+  }
+
+  .search-input-mask {
+    width: 35px;
+    left: 65px;
+  }
+
+  /* Small mobile - Icon with short text */
+  .delete-all-floating {
+    bottom: 12px;
+    right: 12px;
+  }
+
+  .delete-all-floating-btn {
+    padding: 10px 12px;
+    font-size: 11px;
+    min-width: 48px;
+    max-width: 120px;
+    min-height: 48px;
+    gap: 6px;
+  }
+
+  .delete-text {
+    display: block;
+    max-width: 60px;
+    font-size: 10px;
+  }
+}
+
+/* Very small screens - icon only with tooltip-like behavior */
+@media (max-width: 360px) {
+  .delete-all-floating {
+    bottom: 10px;
+    right: 10px;
+  }
+
+  .delete-all-floating-btn {
+    padding: 12px;
+    min-width: 48px;
+    max-width: 48px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    gap: 0;
+    justify-content: center;
+  }
+
+  /* Hide text on very small screens, show only icon */
+  .delete-text {
+    display: none;
+  }
+
+  /* Add tooltip-like behavior on very small screens */
+  .delete-all-floating-btn::after {
+    content: attr(aria-label);
+    position: absolute;
+    bottom: 120%;
+    right: 0;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 1001;
+    max-width: 200px;
+    text-align: center;
+  }
+
+  .delete-all-floating-btn::before {
+    content: '';
+    position: absolute;
+    bottom: 110%;
+    right: 20px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  /* Show tooltip on touch/press */
+  .delete-all-floating-btn:active::after,
+  .delete-all-floating-btn:active::before {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* Landscape mobile orientation adjustments */
+@media (max-height: 500px) and (orientation: landscape) {
+  .delete-all-floating {
+    bottom: 8px;
+    right: 8px;
+  }
+
+  .delete-all-floating-btn {
+    padding: 8px 10px;
+    font-size: 10px;
+    min-height: 40px;
+  }
+
+  .delete-text {
+    font-size: 9px;
+    max-width: 80px;
+  }
+}
+
+/* High DPI mobile screens */
+@media (-webkit-min-device-pixel-ratio: 2) and (max-width: 768px) {
+  .delete-all-floating-btn {
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+  }
+}
+
+/* Prevent text selection and improve touch on all mobile devices */
+@media (pointer: coarse) {
+  .delete-all-floating-btn {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    
+    /* Improve touch responsiveness */
+    -webkit-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+  }
+  
+  /* Remove hover animations on touch devices */
+  .delete-all-floating-btn {
+    animation: none;
+  }
+  
+  .delete-all-floating-btn::before {
+    animation: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-image {
+    max-width: 200px;
+  }
+
+  .wrapper>ul>li {
+    padding: 6px;
+  }
+
+  .wrapper>ul>li>.center {
+    font-size: 12px;
+    min-width: 120px;
+  }
+
+  .wrapper>ul>li>.right {
+    width: 80px;
+    gap: 0px;
+  }
+
+  .wrapper>ul>li>.right>span>button {
+    padding: 3px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .filter-btn {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .edit-buttons {
+    gap: 6px;
+  }
+
+  .edit-btn {
+    padding: 5px 10px;
+    font-size: 11px;
+    min-width: 50px;
   }
 
   .progress-text {
@@ -1041,6 +1383,19 @@ html {
   .search-input-mask {
     width: 35px;
     left: 65px; /* Further adjusted for smallest screens */
+  }
+
+  /* Smallest screen floating delete button */
+  .delete-all-floating {
+    bottom: 15px;
+    right: 15px;
+  }
+
+  .delete-all-floating-btn {
+    padding: 10px 12px;
+    font-size: 12px;
+    min-width: 50px;
+    max-width: 50px; /* Icon only on very small screens */
   }
 }
 
@@ -1091,4 +1446,4 @@ input:focus-visible {
 .loading {
   opacity: 0.6;
   pointer-events: none;
-} 
+}
