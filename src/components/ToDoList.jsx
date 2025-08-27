@@ -32,17 +32,6 @@ function ToDoList(props) {
     }
   };
 
-  // Function untuk check apakah task bisa di-move berdasarkan filtered tasks
-  const canMoveUp = (taskId) => {
-    const currentIndex = props.tasks.findIndex((task) => task.id === taskId);
-    return currentIndex > 0;
-  };
-
-  const canMoveDown = (taskId) => {
-    const currentIndex = props.tasks.findIndex((task) => task.id === taskId);
-    return currentIndex < props.tasks.length - 1;
-  };
-
   // Function untuk handle click pada completed task
   const handleCompletedTaskClick = (item) => {
     if (item.completed) {
@@ -67,17 +56,11 @@ function ToDoList(props) {
     const filteredIndex = props.tasks.findIndex((task) => task.id === taskId);
     
     // Tentukan target task ID berdasarkan filtered view
-    let targetTaskId;
     if (direction === "up" && filteredIndex > 0) {
-      targetTaskId = props.tasks[filteredIndex - 1].id;
+      props.move(taskId, direction);
     } else if (direction === "down" && filteredIndex < props.tasks.length - 1) {
-      targetTaskId = props.tasks[filteredIndex + 1].id;
-    } else {
-      return; // Tidak bisa move
+      props.move(taskId, direction);
     }
-
-    // Panggil move function dengan task ID yang akan ditukar posisinya
-    props.move(taskId, direction);
   };
 
   // Function to get empty message based on current state
@@ -94,16 +77,16 @@ function ToDoList(props) {
     } else {
       // If no search query, show regular empty messages
       if (props.currentFilter === "active") {
-        return "Tidak ada task aktif";
+        return "There are no active tasks";
       } else if (props.currentFilter === "completed") {
-        return "Tidak ada task yang selesai";
+        return "No tasks completed";
       } else {
-        return "Tidak ada task yang tersedia";
+        return "No tasks available";
       }
     }
   };
 
-  // Jika tidak ada task yang tersedia
+  // Jika No tasks available
   if (props.tasks.length === 0) {
     return (
       <div className="wrapper">

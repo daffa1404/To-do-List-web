@@ -3,14 +3,14 @@ import "./App.css";
 import Form from "./components/Form";
 import ToDoList from "./components/ToDoList";
 import DeleteAllButton from "./components/DeleteAllButton";
-import SearchProgressBar from "./components/SearchBar"; // Fixed import path
+import SearchProgressBar from "./components/SearchBar";
 
 // Custom Alert Component
 const CustomAlert = ({
   isOpen,
   message,
   onClose,
-  title = "ToDoListApp memperingatkan",
+  title = "ToDoListApp warns",
 }) => {
   const alertRef = useRef();
 
@@ -205,7 +205,7 @@ const CustomConfirm = ({
   message,
   onConfirm,
   onCancel,
-  title = "ToDoListApp memperingatkan",
+  title = "ToDoListApp warns",
 }) => {
   const confirmRef = useRef();
 
@@ -451,7 +451,7 @@ function App() {
   });
 
   // Alert helper functions
-  const showAlert = (message, title = "ToDoListApp memperingatkan") => {
+  const showAlert = (message, title = "ToDoListApp warns") => {
     setAlertConfig({
       isOpen: true,
       message,
@@ -467,7 +467,7 @@ function App() {
   const showConfirm = (
     message,
     onConfirmCallback,
-    title = "ToDoListApp memperingatkan"
+    title = "ToDoListApp warns"
   ) => {
     setConfirmConfig({
       isOpen: true,
@@ -543,7 +543,7 @@ function App() {
   function addTask(event) {
     event.preventDefault();
     if (newTask.current.value === "") {
-      showAlert("Silakan masukkan hal yang akan kamu kerjakan");
+      showAlert("Please enter what you will do");
       return false;
     }
     const data = {
@@ -559,7 +559,7 @@ function App() {
     const task = tasks.find((item) => item.id === id);
     
     if (task && task.completed) {
-      showAlert("Task yang sudah selesai tidak dapat diubah statusnya lagi");
+      showAlert("Tasks that have been completed cannot have their status changed again");
       return;
     }
 
@@ -574,7 +574,7 @@ function App() {
     const task = tasks.find((item) => item.id === id);
     
     if (task && task.completed) {
-      showAlert("Task yang sudah selesai tidak dapat diedit lagi");
+      showAlert("Completed tasks can no longer be edited");
       return;
     }
 
@@ -601,7 +601,7 @@ function App() {
   }
 
   function remove(id) {
-    showConfirm("Yakin akan hapus data ini?", () => {
+    showConfirm("Are you sure you want to delete this data?", () => {
       setTasks(tasks.filter((item) => item.id !== id));
     });
   }
@@ -613,17 +613,17 @@ function App() {
 
     // Check if there are any tasks to delete based on current filter
     if (currentFilter === "active" && activeTasks.length === 0) {
-      showAlert("Tidak ada task aktif yang dapat dihapus");
+      showAlert("There are no active tasks to delete");
       return;
     }
     
     if (currentFilter === "completed" && completedTasks.length === 0) {
-      showAlert("Tidak ada task yang selesai untuk dihapus");
+      showAlert("There are no completed tasks to delete");
       return;
     }
 
     if (currentFilter === "all" && tasks.length === 0) {
-      showAlert("Tidak ada task yang dapat dihapus");
+      showAlert("No tasks can be deleted");
       return;
     }
 
@@ -634,8 +634,8 @@ function App() {
     if (currentFilter === "active") {
       const count = activeTasks.length;
       message = count === 1 
-        ? "Yakin akan menghapus 1 task aktif?" 
-        : `Yakin akan menghapus ${count} task aktif?`;
+        ? "Are you sure you want to delete 1 active task?" 
+        : `Are you sure you want to delete ${count} active tasks?`;
       
       deleteAction = () => {
         // Keep only completed tasks
@@ -645,8 +645,8 @@ function App() {
     else if (currentFilter === "completed") {
       const count = completedTasks.length;
       message = count === 1 
-        ? "Yakin akan menghapus 1 task yang selesai?" 
-        : `Yakin akan menghapus ${count} task yang selesai?`;
+        ? "Are you sure you want to delete 1 completed task?" 
+        : `Are you sure you want to delete ${count} completed tasks?`;
       
       deleteAction = () => {
         // Keep only active tasks
@@ -659,15 +659,15 @@ function App() {
       const completedCount = completedTasks.length;
 
       if (activeCount > 0 && completedCount > 0) {
-        message = `Yakin akan menghapus semua ${totalTasks} task (${activeCount} aktif + ${completedCount} selesai)?`;
+        message = `Are you sure you want to delete all ${totalTasks} tasks (${activeCount} active + ${completedCount} completed)?`;
       } else if (activeCount > 0) {
         message = totalTasks === 1 
-          ? "Yakin akan menghapus 1 task aktif?" 
-          : `Yakin akan menghapus ${totalTasks} task aktif?`;
+          ? "Are you sure you want to delete 1 active task?" 
+          : `Are you sure you want to delete the active ${totalTasks} tasks?`;
       } else {
         message = totalTasks === 1 
-          ? "Yakin akan menghapus 1 task yang selesai?" 
-          : `Yakin akan menghapus ${totalTasks} task yang selesai?`;
+          ? "Are you sure you want to delete 1 completed task?" 
+          : `Are you sure you want to delete completed ${totalTasks} tasks?`;
       }
 
       deleteAction = () => {

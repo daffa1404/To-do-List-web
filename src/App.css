@@ -52,7 +52,7 @@ html {
   top: 3px;
   bottom: 3px;
   border: 0;
-  background: linear-gradient(135deg, #3925e8, #1dccc9);
+  background: linear-gradient(135deg, #3925e8, #155c7f);
   color: #fff;
   outline: none;
   margin: 0;
@@ -220,7 +220,7 @@ html {
 }
 
 .task-counter span {
-  background: linear-gradient(135deg, #3925e8, #1dccc9);
+  background: linear-gradient(135deg, #3925e8, #155c7f);
   color: #fff;
   padding: 4px 12px;
   border-radius: 20px;
@@ -265,7 +265,7 @@ html {
 }
 
 .filter-btn.active {
-  background: linear-gradient(135deg, #3925e8, #1dccc9);
+  background: linear-gradient(135deg, #3925e8, #155c7f);
   color: #fff;
   box-shadow: 0 2px 8px rgba(57, 37, 232, 0.4);
   transform: translateY(-1px);
@@ -381,7 +381,7 @@ html {
 }
 
 .edit-btn.save {
-  background: linear-gradient(135deg, #28a745, #20c997);
+  background: linear-gradient(135deg, #667eea, #764ba2);  
   color: #fff;
 }
 
@@ -416,7 +416,7 @@ html {
   }
 }
 
-/* ========== SEARCH BAR STYLES ========== */
+/* ========== SEARCH BAR STYLES - FIXED TEXT VISIBILITY BUG ========== */
 .search-wrapper {
   flex: 1;
   display: flex;
@@ -462,7 +462,7 @@ html {
   height: var(--search-input-h);
 }
 
-/* Search Input */
+/* Search Input - FIXED Z-INDEX AND POSITIONING */
 .search-input {
   background-color: #010201;
   border: none;
@@ -473,7 +473,7 @@ html {
   padding-inline: 45px 45px;
   font-size: 14px;
   position: relative;
-  z-index: 3;
+  z-index: 5; /* INCREASED Z-INDEX TO BE ABOVE ALL MASKS */
   box-sizing: border-box;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -486,22 +486,29 @@ html {
 .search-input:focus {
   outline: 2px solid #2b2752;
   outline-offset: 0;
+  z-index: 6; /* EVEN HIGHER WHEN FOCUSED */
 }
 
-/* Search Masks */
+/* Search Masks - FIXED TO NOT OVERLAP TEXT AND PROPER Z-INDEX */
 .search-input-mask {
   pointer-events: none;
-  width: 80px;
+  width: 50px; /* Reduced further to prevent text overlap */
   height: 16px;
   position: absolute;
   background: linear-gradient(90deg, transparent, black);
   top: 15px;
-  left: 55px;
-  z-index: 4;
+  left: 80px; /* Moved further right to avoid text area */
+  z-index: 4; /* BELOW INPUT */
+  transition: opacity 0.3s ease;
+  opacity: 1;
 }
 
-.search-main:focus-within > .search-input-mask {
-  display: none;
+/* CRITICAL FIX: Hide mask when input is focused OR has value */
+.search-main:focus-within > .search-input-mask,
+.search-main.has-value > .search-input-mask,
+.search-input:focus ~ .search-input-mask {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .search-pink-mask {
@@ -509,25 +516,27 @@ html {
   width: 25px;
   height: 16px;
   position: absolute;
-  background: #cf30aa;
+  background: #ececec;
   top: 8px;
   left: 4px;
   filter: blur(15px);
   opacity: 0.8;
   transition: opacity 0.4s ease;
-  z-index: 2;
+  z-index: 2; /* BELOW INPUT */
 }
 
-.search-main:hover > .search-pink-mask {
+.search-main:hover > .search-pink-mask,
+.search-main:focus-within > .search-pink-mask {
   opacity: 0;
 }
 
-/* Search Icons */
+/* Search Icons - PROPER Z-INDEX */
 .search-icon {
   position: absolute;
   left: 15px;
   top: 12px;
-  z-index: 4;
+  z-index: 6; /* ABOVE INPUT */
+  pointer-events: none;
 }
 
 .search-clear-icon {
@@ -537,7 +546,7 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 4;
+  z-index: 6; /* ABOVE INPUT */
   height: 20px;
   width: 20px;
   border-radius: 50%;
@@ -555,7 +564,7 @@ html {
 }
 
 .search-clear-icon:focus-visible {
-  outline: 2px solid #6356d8;
+  outline: 2px solid #56b1d8;
   outline-offset: 2px;
 }
 
@@ -568,7 +577,7 @@ html {
   right: 6px;
   border-radius: 8px;
   overflow: hidden;
-  z-index: 3;
+  z-index: 3; /* BELOW INPUT AND ICONS */
 }
 
 .search-filterBorder::before {
@@ -585,16 +594,16 @@ html {
   filter: brightness(1.35);
   background-image: conic-gradient(
     rgba(0, 0, 0, 0),
-    #3d3a4f,
+    #1596b3,
     rgba(0, 0, 0, 0) 50%,
     rgba(0, 0, 0, 0) 50%,
-    #3d3a4f,
+    #e0e0e1,
     rgba(0, 0, 0, 0) 100%
   );
   animation: rotate 4s linear infinite;
 }
 
-/* Search Layered gradient frames (behind input) */
+/* Search Layered gradient frames (behind input) - PROPER Z-INDEX */
 .search-white,
 .search-border,
 .search-darkBorderBg,
@@ -606,7 +615,7 @@ html {
   overflow: hidden;
   border-radius: 10px;
   pointer-events: none;
-  z-index: 1;
+  z-index: 1; /* LOWEST Z-INDEX */
 }
 
 .search-white,
@@ -639,10 +648,10 @@ html {
   filter: brightness(1.4);
   background-image: conic-gradient(
     rgba(0, 0, 0, 0) 0%,
-    #a099d8,
+    #99cfd8,
     rgba(0, 0, 0, 0) 8%,
     rgba(0, 0, 0, 0) 50%,
-    #dfa2da,
+    #ece9eb,
     rgba(0, 0, 0, 0) 58%
   );
   transition: transform 2s ease;
@@ -801,7 +810,7 @@ html {
   font-size: 12px;
   font-weight: bold;
   color: #fff;
-  background: linear-gradient(135deg, #3925e8, #1dccc9);
+  background: linear-gradient(135deg, #3925e8, #155c7f);
   padding: 2px 6px;
   border-radius: 8px;
   min-width: 30px;
@@ -940,11 +949,18 @@ html {
   }
 
   .search-icon {
-    left: 12px;
+    left: 10px;
   }
 
   .search-clear-icon {
-    right: 12px;
+    right: 10px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .search-input-mask {
+    width: 40px;
+    left: 70px; /* Adjusted for mobile */
   }
 }
 
@@ -1015,13 +1031,16 @@ html {
   }
 
   .search-icon {
-    left: 10px;
+    left: 12px;
   }
 
   .search-clear-icon {
-    right: 10px;
-    width: 18px;
-    height: 18px;
+    right: 12px;
+  }
+
+  .search-input-mask {
+    width: 35px;
+    left: 65px; /* Further adjusted for smallest screens */
   }
 }
 
@@ -1036,12 +1055,12 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #3925e8, #1dccc9);
+  background: linear-gradient(135deg, #3925e8, #155c7f);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #2d1bb8, #16a8a5);
+  background: linear-gradient(135deg, #3925e8, #155c7f);
 }
 
 /* Animation untuk smooth transitions */
@@ -1072,4 +1091,4 @@ input:focus-visible {
 .loading {
   opacity: 0.6;
   pointer-events: none;
-}
+} 

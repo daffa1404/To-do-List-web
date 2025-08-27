@@ -21,9 +21,12 @@ function SearchProgressBar({
       case "completed":
         return "Search completed tasks...";
       default:
-        return "Search your task...";
+        return "Search your tasks...";
     }
   };
+
+  // FIXED: Proper class management for mask visibility control
+  const searchMainClass = (searchQuery && searchQuery.trim() !== "") ? "search-main has-value" : "search-main";
 
   return (
     <div className="search-progress-container">
@@ -39,8 +42,10 @@ function SearchProgressBar({
           <div className="search-border" aria-hidden="true"></div>
 
           {/* Main search control */}
-          <div className="search-main">
-            <label htmlFor="search-input" className="visually-hidden">Search</label>
+          <div className={searchMainClass}>
+            <label htmlFor="search-input" className="visually-hidden">
+              Search tasks
+            </label>
             <input
               id="search-input"
               placeholder={getPlaceholder()}
@@ -49,14 +54,17 @@ function SearchProgressBar({
               className="search-input"
               value={searchQuery}
               onChange={handleSearchChange}
-              aria-label="Search tasks"
+              aria-label={`Search ${currentFilter === 'all' ? 'all' : currentFilter} tasks`}
               autoComplete="off"
             />
+            
+            {/* FIXED: Mask only shows when input is empty AND not focused */}
             <div className="search-input-mask" aria-hidden="true"></div>
             <div className="search-pink-mask" aria-hidden="true"></div>
 
             <div className="search-filterBorder" aria-hidden="true"></div>
 
+            {/* Clear button - only show when there's text */}
             {searchQuery && (
               <button 
                 className="search-clear-icon" 
@@ -66,8 +74,8 @@ function SearchProgressBar({
                 title="Clear search"
               >
                 <svg
-                  width="18"
-                  height="18"
+                  width="16"
+                  height="16"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -81,15 +89,16 @@ function SearchProgressBar({
               </button>
             )}
 
+            {/* Search icon */}
             <div className="search-icon" aria-hidden="true">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 strokeWidth="2"
                 strokeLinejoin="round"
                 strokeLinecap="round"
-                height="20"
                 fill="none"
                 className="feather feather-search"
                 aria-hidden="true"
