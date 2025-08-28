@@ -21,8 +21,8 @@ function DeleteAllButton({ onDeleteAll, hasTasks, currentFilter, tasksCount }) {
           : `Delete Completed Tasks (${tasksCount})`;
       default:
         return tasksCount === 1 
-          ? "Delete All Task" 
-          : `Delete All Tasks (${tasksCount})`;
+          ? "Delete all tasks Task" 
+          : `Delete all tasks Tasks (${tasksCount})`;
     }
   };
 
@@ -30,11 +30,11 @@ function DeleteAllButton({ onDeleteAll, hasTasks, currentFilter, tasksCount }) {
   const getShortButtonText = () => {
     switch (currentFilter) {
       case "active":
-        return tasksCount === 1 ? "Delete Active" : `Delete Active (${tasksCount})`;
+        return tasksCount === 1 ? "Delete all active tasks" : `Delete all active tasks (${tasksCount})`;
       case "completed":
-        return tasksCount === 1 ? "Delete Completed" : `Delete Completed (${tasksCount})`;
+        return tasksCount === 1 ? "Delete all completed tasks" : `Delete all completed tasks (${tasksCount})`;
       default:
-        return tasksCount === 1 ? "Delete All" : `Delete All (${tasksCount})`;
+        return tasksCount === 1 ? "Delete all tasks" : `Delete all tasks tasks (${tasksCount})`;
     }
   };
 
