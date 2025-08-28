@@ -26,6 +26,18 @@ function DeleteAllButton({ onDeleteAll, hasTasks, currentFilter, tasksCount }) {
     }
   };
 
+  // Get short version for mobile
+  const getShortButtonText = () => {
+    switch (currentFilter) {
+      case "active":
+        return tasksCount === 1 ? "Delete Active" : `Delete Active (${tasksCount})`;
+      case "completed":
+        return tasksCount === 1 ? "Delete Completed" : `Delete Completed (${tasksCount})`;
+      default:
+        return tasksCount === 1 ? "Delete All" : `Delete All (${tasksCount})`;
+    }
+  };
+
   return (
     <>
       {/* Desktop Version - Floating Button */}
@@ -56,7 +68,7 @@ function DeleteAllButton({ onDeleteAll, hasTasks, currentFilter, tasksCount }) {
         </button>
       </div>
 
-      {/* Mobile Version - Footer */}
+      {/* Mobile Version - Footer - ENHANCED FOR BETTER COMPATIBILITY */}
       <div className="delete-all-footer">
         <div className="delete-all-footer-content">
           <button
@@ -67,8 +79,8 @@ function DeleteAllButton({ onDeleteAll, hasTasks, currentFilter, tasksCount }) {
             title={getButtonText()}
           >
             <svg
-              width="20"
-              height="20"
+              width="18"
+              height="18"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -81,7 +93,7 @@ function DeleteAllButton({ onDeleteAll, hasTasks, currentFilter, tasksCount }) {
               <line x1="10" y1="11" x2="10" y2="17" />
               <line x1="14" y1="11" x2="14" y2="17" />
             </svg>
-            <span>{getButtonText()}</span>
+            <span>{getShortButtonText()}</span>
           </button>
         </div>
       </div>

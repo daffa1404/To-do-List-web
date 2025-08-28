@@ -428,7 +428,12 @@ function App() {
   const newTask = useRef("");
   const STORAGE = "TODOLIST_APP";
   const [tasks, setTasks] = useState(() => {
-    return JSON.parse(localStorage.getItem(STORAGE)) || [];
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE)) || [];
+    } catch (error) {
+      console.error("Error loading tasks from localStorage:", error);
+      return [];
+    }
   });
 
   const [taskCompleted, setTaskCompleted] = useState(0);
@@ -527,7 +532,11 @@ function App() {
   const progressPercentage = tasks.length > 0 ? Math.round((taskCompleted / tasks.length) * 100) : 0;
 
   useEffect(() => {
-    localStorage.setItem(STORAGE, JSON.stringify(tasks));
+    try {
+      localStorage.setItem(STORAGE, JSON.stringify(tasks));
+    } catch (error) {
+      console.error("Error saving tasks to localStorage:", error);
+    }
     const complete = tasks.filter((item) => item.completed === true).length;
     setTaskCompleted(complete);
   }, [tasks]);

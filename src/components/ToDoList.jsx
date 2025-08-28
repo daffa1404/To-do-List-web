@@ -16,7 +16,7 @@ function ToDoList(props) {
 
   const saveEdit = (id) => {
     if (editValue.trim() === "") {
-      props.showAlert("Task tidak boleh kosong");
+      props.showAlert("Task cannot be empty");
       return;
     }
     props.editTask(id, editValue.trim());
@@ -35,7 +35,7 @@ function ToDoList(props) {
   // Function untuk handle click pada completed task
   const handleCompletedTaskClick = (item) => {
     if (item.completed) {
-      props.showAlert("Task yang sudah selesai tidak dapat diubah statusnya lagi");
+      props.showAlert("Tasks that have been completed cannot have their status changed again");
       return;
     }
     props.setCompleted(item.id);
@@ -44,7 +44,7 @@ function ToDoList(props) {
   // Function untuk handle edit button pada completed task
   const handleEditButtonClick = (item) => {
     if (item.completed) {
-      props.showAlert("Task yang sudah selesai tidak dapat diedit lagi");
+      props.showAlert("Completed tasks can no longer be edited");
       return;
     }
     startEditing(item.id, item.task);
@@ -160,6 +160,7 @@ function ToDoList(props) {
                     onKeyDown={(e) => handleKeyPress(e, item.id)}
                     autoFocus
                     autoComplete="off"
+                    placeholder="Enter task name..."
                   />
                   <div className="edit-buttons">
                     <button

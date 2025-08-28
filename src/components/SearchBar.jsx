@@ -33,10 +33,8 @@ function SearchProgressBar({
       {/* Search Bar */}
       <div className="search-wrapper">
         <div className="search-container" role="search">
-          {/* Layered gradient frames */}
+          {/* Layered gradient frames - MOBILE OPTIMIZED ORDER */}
           <div className="search-glow" aria-hidden="true"></div>
-          <div className="search-darkBorderBg" aria-hidden="true"></div>
-          <div className="search-darkBorderBg" aria-hidden="true"></div>
           <div className="search-darkBorderBg" aria-hidden="true"></div>
           <div className="search-white" aria-hidden="true"></div>
           <div className="search-border" aria-hidden="true"></div>
@@ -56,6 +54,7 @@ function SearchProgressBar({
               onChange={handleSearchChange}
               aria-label={`Search ${currentFilter === 'all' ? 'all' : currentFilter} tasks`}
               autoComplete="off"
+              spellCheck="false"
             />
             
             {/* FIXED: Mask only shows when input is empty AND not focused */}
@@ -64,32 +63,7 @@ function SearchProgressBar({
 
             <div className="search-filterBorder" aria-hidden="true"></div>
 
-            {/* Clear button - only show when there's text */}
-            {searchQuery && (
-              <button 
-                className="search-clear-icon" 
-                type="button" 
-                onClick={clearSearch}
-                aria-label="Clear search"
-                title="Clear search"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </button>
-            )}
-
-            {/* Search icon */}
+            {/* Search icon - ALWAYS VISIBLE */}
             <div className="search-icon" aria-hidden="true">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -123,6 +97,31 @@ function SearchProgressBar({
                 </defs>
               </svg>
             </div>
+
+            {/* Clear button - only show when there's text */}
+            {searchQuery && (
+              <button 
+                className="search-clear-icon" 
+                type="button" 
+                onClick={clearSearch}
+                aria-label="Clear search"
+                title="Clear search"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            )}
           </div>
         </div>
       </div>

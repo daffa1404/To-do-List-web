@@ -342,12 +342,12 @@ html {
   display: block;
 }
 
-/* ========== MOBILE FOOTER DELETE BUTTON ========== */
+/* ========== MOBILE FOOTER DELETE BUTTON - FIXED ========== */
 .delete-all-footer {
   display: none;
 }
 
-/* Show footer only on mobile */
+/* Show footer only on mobile with proper safe area support */
 @media only screen and (max-width: 768px) {
   .delete-all-footer {
     display: block;
@@ -356,29 +356,35 @@ html {
     left: 0;
     right: 0;
     z-index: 1000;
-    background: rgba(48, 48, 53, 0.95);
+    background: rgba(33, 37, 41, 0.95);
     backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(47, 46, 46, 0.1);
-    padding: 15px 20px;
-    box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.3);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 15px calc(env(safe-area-inset-bottom) + 12px);
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.4);
+    
+    /* Support for devices with notch/home indicator */
+    padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
+    -webkit-padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
   }
 
   .delete-all-footer-content {
     display: flex;
     justify-content: center;
     align-items: center;
+    max-width: 100%;
   }
 
   .delete-all-footer-btn {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     background: linear-gradient(135deg, #dc3545, #c82333);
     border: none;
     color: #fff;
-    padding: 16px 24px;
+    padding: 14px 20px;
     border-radius: 50px;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -387,26 +393,22 @@ html {
     text-transform: none;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 8px 25px rgba(220, 53, 69, 0.5);
-    min-width: 220px;
-    max-width: 320px;
+    box-shadow: 0 4px 20px rgba(220, 53, 69, 0.4);
+    min-width: 180px;
+    max-width: calc(100vw - 40px);
     justify-content: center;
-  }
-
-  .delete-all-footer-btn:hover {
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-    transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 12px 30px rgba(220, 53, 69, 0.6);
+    white-space: nowrap;
   }
 
   .delete-all-footer-btn:active {
-    transform: translateY(0) scale(1);
-    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    transform: scale(0.98);
+    box-shadow: 0 2px 10px rgba(220, 53, 69, 0.6);
   }
 
-  /* Add padding bottom to body to prevent content overlap */
+  /* Add safe padding to body to prevent content overlap */
   body {
-    padding-bottom: 80px;
+    padding-bottom: calc(70px + env(safe-area-inset-bottom));
   }
 }
 
@@ -556,13 +558,16 @@ html {
   align-items: center;
 }
 
+/* MOBILE OVERRIDE - Tetap horizontal seperti desktop */
 @media only screen and (max-width: 800px) {
   .search-progress-container {
     width: 80%;
+    flex-direction: row; /* Paksa tetap horizontal */
+    gap: 10px; /* Kurangi gap sedikit untuk mobile */
   }
 }
 
-/* ========== SEARCH BAR STYLES - FIXED TEXT VISIBILITY BUG ========== */
+/* ========== SEARCH BAR STYLES - FIXED FOR MOBILE ========== */
 .search-wrapper {
   flex: 1;
   display: flex;
@@ -571,7 +576,7 @@ html {
   min-width: 0;
 }
 
-/* Search container variables */
+/* Search container variables - MOBILE OPTIMIZED */
 .search-wrapper {
   --search-input-w: 100%;
   --search-input-h: 45px;
@@ -608,7 +613,7 @@ html {
   height: var(--search-input-h);
 }
 
-/* Search Input - FIXED Z-INDEX AND POSITIONING */
+/* Search Input - MOBILE FIXED */
 .search-input {
   background-color: #010201;
   border: none;
@@ -619,34 +624,55 @@ html {
   padding-inline: 45px 45px;
   font-size: 14px;
   position: relative;
-  z-index: 5; /* INCREASED Z-INDEX TO BE ABOVE ALL MASKS */
+  z-index: 10;
   box-sizing: border-box;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* MOBILE PLACEHOLDER FIX */
 .search-input::placeholder {
   color: #c0b9c0;
   font-size: 14px;
 }
 
+/* Mobile specific placeholder handling */
+@media only screen and (max-width: 768px) {
+  .search-input::placeholder {
+    font-size: 13px;
+  }
+  
+  .search-input {
+    padding-inline: 40px 40px;
+  }
+}
+
 .search-input:focus {
   outline: 2px solid #2b2752;
   outline-offset: 0;
-  z-index: 6; /* EVEN HIGHER WHEN FOCUSED */
+  z-index: 11;
 }
 
-/* Search Masks - FIXED TO NOT OVERLAP TEXT AND PROPER Z-INDEX */
+/* Search Masks - MOBILE OPTIMIZED */
 .search-input-mask {
   pointer-events: none;
-  width: 50px; /* Reduced further to prevent text overlap */
+  width: 40px;
   height: 16px;
   position: absolute;
   background: linear-gradient(90deg, transparent, black);
   top: 15px;
-  left: 80px; /* Moved further right to avoid text area */
-  z-index: 4; /* BELOW INPUT */
+  left: 70px;
+  z-index: 8;
   transition: opacity 0.3s ease;
   opacity: 1;
+}
+
+/* Mobile mask adjustment */
+@media only screen and (max-width: 768px) {
+  .search-input-mask {
+    width: 30px;
+    left: 55px;
+    top: 14px;
+  }
 }
 
 /* CRITICAL FIX: Hide mask when input is focused OR has value */
@@ -668,7 +694,7 @@ html {
   filter: blur(15px);
   opacity: 0.8;
   transition: opacity 0.4s ease;
-  z-index: 2; /* BELOW INPUT */
+  z-index: 7;
 }
 
 .search-main:hover > .search-pink-mask,
@@ -681,8 +707,15 @@ html {
   position: absolute;
   left: 15px;
   top: 12px;
-  z-index: 6; /* ABOVE INPUT */
+  z-index: 12;
   pointer-events: none;
+}
+
+/* Mobile icon adjustment */
+@media only screen and (max-width: 768px) {
+  .search-icon {
+    left: 12px;
+  }
 }
 
 .search-clear-icon {
@@ -692,7 +725,7 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 6; /* ABOVE INPUT */
+  z-index: 12;
   height: 20px;
   width: 20px;
   border-radius: 50%;
@@ -701,6 +734,13 @@ html {
   cursor: pointer;
   color: #b0b0b0;
   transition: all 0.3s ease;
+}
+
+/* Mobile clear icon adjustment */
+@media only screen and (max-width: 768px) {
+  .search-clear-icon {
+    right: 12px;
+  }
 }
 
 .search-clear-icon:hover {
@@ -723,7 +763,7 @@ html {
   right: 6px;
   border-radius: 8px;
   overflow: hidden;
-  z-index: 3; /* BELOW INPUT AND ICONS */
+  z-index: 9;
 }
 
 .search-filterBorder::before {
@@ -749,7 +789,7 @@ html {
   animation: rotate 4s linear infinite;
 }
 
-/* Search Layered gradient frames (behind input) - PROPER Z-INDEX */
+/* Search Layered gradient frames - MOBILE OPTIMIZED */
 .search-white,
 .search-border,
 .search-darkBorderBg,
@@ -761,7 +801,7 @@ html {
   overflow: hidden;
   border-radius: 10px;
   pointer-events: none;
-  z-index: 1; /* LOWEST Z-INDEX */
+  z-index: 1;
 }
 
 .search-white,
@@ -772,6 +812,17 @@ html {
   filter: blur(2px);
   max-width: calc(100% + 8px);
   max-height: 53px;
+}
+
+/* Mobile frame optimization */
+@media only screen and (max-width: 768px) {
+  .search-white,
+  .search-border,
+  .search-darkBorderBg {
+    filter: blur(1.5px);
+    max-width: calc(100% + 6px);
+    max-height: 50px;
+  }
 }
 
 .search-white {
@@ -859,7 +910,7 @@ html {
   transition: transform 2s ease;
 }
 
-/* Search Glow layer larger than frames */
+/* Search Glow layer larger than frames - MOBILE OPTIMIZED */
 .search-glow {
   width: var(--search-frame2-w);
   height: var(--search-frame2-h);
@@ -867,6 +918,16 @@ html {
   opacity: 0.4;
   max-width: calc(100% + 12px);
   max-height: 65px;
+}
+
+/* Mobile glow optimization */
+@media only screen and (max-width: 768px) {
+  .search-glow {
+    filter: blur(15px);
+    opacity: 0.3;
+    max-width: calc(100% + 10px);
+    max-height: 60px;
+  }
 }
 
 .search-glow::before {
@@ -929,6 +990,13 @@ html {
   width: 140px;
 }
 
+/* Mobile adjustment untuk progress wrapper */
+@media only screen and (max-width: 768px) {
+  .progress-wrapper {
+    width: 120px; /* Sedikit lebih kecil untuk mobile */
+  }
+}
+
 .progress-container {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
@@ -936,6 +1004,13 @@ html {
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile progress container adjustment */
+@media only screen and (max-width: 768px) {
+  .progress-container {
+    padding: 10px;
+  }
 }
 
 .progress-info {
@@ -952,6 +1027,13 @@ html {
   letter-spacing: 0.3px;
 }
 
+/* Mobile progress text adjustment */
+@media only screen and (max-width: 768px) {
+  .progress-text {
+    font-size: 12px;
+  }
+}
+
 .progress-percentage {
   font-size: 12px;
   font-weight: bold;
@@ -961,6 +1043,15 @@ html {
   border-radius: 8px;
   min-width: 30px;
   text-align: center;
+}
+
+/* Mobile progress percentage adjustment */
+@media only screen and (max-width: 768px) {
+  .progress-percentage {
+    font-size: 11px;
+    padding: 2px 5px;
+    min-width: 25px;
+  }
 }
 
 .progress-bar-container {
@@ -1019,6 +1110,13 @@ html {
   font-weight: 500;
 }
 
+/* Mobile progress stats adjustment */
+@media only screen and (max-width: 768px) {
+  .progress-stats-text {
+    font-size: 9px;
+  }
+}
+
 /* Search Animations */
 @keyframes rotate {
   100% {
@@ -1026,7 +1124,7 @@ html {
   }
 }
 
-/* Responsive untuk mobile */
+/* Responsive untuk mobile - ENHANCED */
 @media (max-width: 768px) {
   .logo-image {
     max-width: 250px;
