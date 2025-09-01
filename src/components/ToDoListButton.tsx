@@ -1,4 +1,6 @@
-function ToDoListButton(props) {
+import { ToDoListButtonProps } from "../types";
+
+function ToDoListButton(props: ToDoListButtonProps): JSX.Element {
   const id = props.id;
   const currentIndex = props.tasks.findIndex((item) => item.id === id);
   const prevIndex = currentIndex - 1;
@@ -10,13 +12,13 @@ function ToDoListButton(props) {
   // Check if move down is possible
   const canMoveDown = nextIndex < props.tasks.length;
 
-  const handleMoveUp = () => {
+  const handleMoveUp = (): void => {
     if (canMoveUp) {
       props.move(id, "up");
     }
   };
 
-  const handleMoveDown = () => {
+  const handleMoveDown = (): void => {
     if (canMoveDown) {
       props.move(id, "down");
     }

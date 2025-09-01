@@ -1,3 +1,5 @@
+import { SearchProgressBarProps } from "../types";
+
 function SearchProgressBar({ 
   searchQuery, 
   setSearchQuery, 
@@ -5,8 +7,9 @@ function SearchProgressBar({
   completed,
   total,
   percentage 
-}) {
-  const handleSearchChange = (e) => {
+}: SearchProgressBarProps): JSX.Element {
+  
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
@@ -25,21 +28,17 @@ function SearchProgressBar({
     }
   };
 
-  // FIXED: Proper class management for mask visibility control
   const searchMainClass = (searchQuery && searchQuery.trim() !== "") ? "search-main has-value" : "search-main";
 
   return (
     <div className="search-progress-container">
-      {/* Search Bar */}
       <div className="search-wrapper">
         <div className="search-container" role="search">
-          {/* Layered gradient frames - MOBILE OPTIMIZED ORDER */}
           <div className="search-glow" aria-hidden="true"></div>
           <div className="search-darkBorderBg" aria-hidden="true"></div>
           <div className="search-white" aria-hidden="true"></div>
           <div className="search-border" aria-hidden="true"></div>
 
-          {/* Main search control */}
           <div className={searchMainClass}>
             <label htmlFor="search-input" className="visually-hidden">
               Search tasks
@@ -54,16 +53,13 @@ function SearchProgressBar({
               onChange={handleSearchChange}
               aria-label={`Search ${currentFilter === 'all' ? 'all' : currentFilter} tasks`}
               autoComplete="off"
-              spellCheck="false"
+              spellCheck={false}
             />
             
-            {/* FIXED: Mask only shows when input is empty AND not focused */}
             <div className="search-input-mask" aria-hidden="true"></div>
             <div className="search-pink-mask" aria-hidden="true"></div>
-
             <div className="search-filterBorder" aria-hidden="true"></div>
 
-            {/* Search icon - ALWAYS VISIBLE */}
             <div className="search-icon" aria-hidden="true">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -78,13 +74,7 @@ function SearchProgressBar({
                 aria-hidden="true"
               >
                 <circle stroke="url(#search-gradient)" r="8" cy="11" cx="11"></circle>
-                <line
-                  stroke="url(#search-line-gradient)"
-                  y2="16.65"
-                  y1="22"
-                  x2="16.65"
-                  x1="22"
-                ></line>
+                <line stroke="url(#search-line-gradient)" y2="16.65" y1="22" x2="16.65" x1="22"></line>
                 <defs>
                   <linearGradient gradientTransform="rotate(50)" id="search-gradient">
                     <stop stopColor="#f8e7f8" offset="0%"></stop>
@@ -98,7 +88,6 @@ function SearchProgressBar({
               </svg>
             </div>
 
-            {/* Clear button - only show when there's text */}
             {searchQuery && (
               <button 
                 className="search-clear-icon" 
@@ -107,16 +96,7 @@ function SearchProgressBar({
                 aria-label="Clear search"
                 title="Clear search"
               >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="18" y1="6" x2="6" y2="18"></line>
                   <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
@@ -126,7 +106,6 @@ function SearchProgressBar({
         </div>
       </div>
 
-      {/* Progress Bar */}
       <div className="progress-wrapper">
         <div className="progress-container">
           <div className="progress-info">
@@ -136,10 +115,7 @@ function SearchProgressBar({
           
           <div className="progress-bar-container">
             <div className="progress-bar-background">
-              <div 
-                className="progress-bar-fill" 
-                style={{ width: `${percentage}%` }}
-              >
+              <div className="progress-bar-fill" style={{ width: `${percentage}%` }}>
                 <div className="progress-bar-shine"></div>
               </div>
             </div>

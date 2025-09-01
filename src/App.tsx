@@ -4,24 +4,42 @@ import Form from "./components/Form";
 import ToDoList from "./components/ToDoList";
 import DeleteAllButton from "./components/DeleteAllButton";
 import SearchProgressBar from "./components/SearchBar";
+import { Task, FilterType } from "./types";
 
-// Custom Alert Component
+interface AlertConfig {
+  isOpen: boolean;
+  message: string;
+  title: string;
+}
+
+interface ConfirmConfig {
+  isOpen: boolean;
+  message: string;
+  title: string;
+  onConfirm: (() => void) | null;
+}
+
 const CustomAlert = ({
   isOpen,
   message,
   onClose,
   title = "ToDoListApp warns",
+}: {
+  isOpen: boolean;
+  message: string;
+  onClose: () => void;
+  title?: string;
 }) => {
-  const alertRef = useRef();
+  const alertRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleEscape = (e) => {
+    const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         onClose();
       }
     };
 
-    const handleClickOutside = (e) => {
+    const handleClickOutside = (e: MouseEvent) => {
       if (alertRef.current && e.target === alertRef.current) {
         onClose();
       }
@@ -106,14 +124,7 @@ const CustomAlert = ({
             }}
           />
 
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              marginBottom: "20px",
-            }}
-          >
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
             <div
               style={{
                 width: "24px",
@@ -128,14 +139,7 @@ const CustomAlert = ({
                 flexShrink: 0,
               }}
             >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M12 2L2 7v10c0 5.55 3.84 10 9 11 5.16-1 9-5.45 9-11V7l-10-5z" />
                 <path d="M9 12l2 2 4-4" />
               </svg>
@@ -183,12 +187,12 @@ const CustomAlert = ({
               transition: "all 0.3s ease",
             }}
             onMouseEnter={(e) => {
-              e.target.style.transform = "translateY(-2px)";
-              e.target.style.boxShadow = "0 10px 20px rgba(102, 126, 234, 0.3)";
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = "0 10px 20px rgba(102, 126, 234, 0.3)";
             }}
             onMouseLeave={(e) => {
-              e.target.style.transform = "translateY(0)";
-              e.target.style.boxShadow = "none";
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "none";
             }}
           >
             OK
@@ -199,24 +203,29 @@ const CustomAlert = ({
   );
 };
 
-// Custom Confirm Component
 const CustomConfirm = ({
   isOpen,
   message,
   onConfirm,
   onCancel,
   title = "ToDoListApp warns",
+}: {
+  isOpen: boolean;
+  message: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+  title?: string;
 }) => {
-  const confirmRef = useRef();
+  const confirmRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleEscape = (e) => {
+    const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         onCancel();
       }
     };
 
-    const handleClickOutside = (e) => {
+    const handleClickOutside = (e: MouseEvent) => {
       if (confirmRef.current && e.target === confirmRef.current) {
         onCancel();
       }
@@ -301,14 +310,7 @@ const CustomConfirm = ({
             }}
           />
 
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              marginBottom: "20px",
-            }}
-          >
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
             <div
               style={{
                 width: "24px",
@@ -323,14 +325,7 @@ const CustomConfirm = ({
                 flexShrink: 0,
               }}
             >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="12" cy="12" r="10" />
                 <line x1="15" y1="9" x2="9" y2="15" />
                 <line x1="9" y1="9" x2="15" y2="15" />
@@ -379,12 +374,12 @@ const CustomConfirm = ({
                 backdropFilter: "blur(10px)",
               }}
               onMouseEnter={(e) => {
-                e.target.style.background = "rgba(255, 255, 255, 0.15)";
-                e.target.style.color = "#e0e6ed";
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.15)";
+                e.currentTarget.style.color = "#e0e6ed";
               }}
               onMouseLeave={(e) => {
-                e.target.style.background = "rgba(255, 255, 255, 0.1)";
-                e.target.style.color = "#b8c5d1";
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
+                e.currentTarget.style.color = "#b8c5d1";
               }}
             >
               Cancel
@@ -407,12 +402,12 @@ const CustomConfirm = ({
                 transition: "all 0.3s ease",
               }}
               onMouseEnter={(e) => {
-                e.target.style.transform = "translateY(-2px)";
-                e.target.style.boxShadow = "0 10px 20px rgba(245, 101, 101, 0.3)";
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow = "0 10px 20px rgba(245, 101, 101, 0.3)";
               }}
               onMouseLeave={(e) => {
-                e.target.style.transform = "translateY(0)";
-                e.target.style.boxShadow = "none";
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "none";
               }}
             >
               OK
@@ -424,62 +419,47 @@ const CustomConfirm = ({
   );
 };
 
-function App() {
-  const newTask = useRef("");
+function App(): JSX.Element {
+  const newTask = useRef<HTMLInputElement>(null);
   const STORAGE = "TODOLIST_APP";
-  const [tasks, setTasks] = useState(() => {
+  
+  const [tasks, setTasks] = useState<Task[]>(() => {
     try {
-      return JSON.parse(localStorage.getItem(STORAGE)) || [];
+      const savedTasks = localStorage.getItem(STORAGE);
+      return savedTasks ? JSON.parse(savedTasks) : [];
     } catch (error) {
       console.error("Error loading tasks from localStorage:", error);
       return [];
     }
   });
 
-  const [taskCompleted, setTaskCompleted] = useState(0);
-  const [currentFilter, setCurrentFilter] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [taskCompleted, setTaskCompleted] = useState<number>(0);
+  const [currentFilter, setCurrentFilter] = useState<FilterType>("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
-  // Alert state
-  const [alertConfig, setAlertConfig] = useState({
+  const [alertConfig, setAlertConfig] = useState<AlertConfig>({
     isOpen: false,
     message: "",
     title: "",
   });
 
-  // Confirm state
-  const [confirmConfig, setConfirmConfig] = useState({
+  const [confirmConfig, setConfirmConfig] = useState<ConfirmConfig>({
     isOpen: false,
     message: "",
     title: "",
     onConfirm: null,
   });
 
-  // Alert helper functions
-  const showAlert = (message, title = "ToDoListApp warns") => {
-    setAlertConfig({
-      isOpen: true,
-      message,
-      title,
-    });
+  const showAlert = (message: string, title = "ToDoListApp warns") => {
+    setAlertConfig({ isOpen: true, message, title });
   };
 
   const closeAlert = () => {
     setAlertConfig((prev) => ({ ...prev, isOpen: false }));
   };
 
-  // Confirm helper functions
-  const showConfirm = (
-    message,
-    onConfirmCallback,
-    title = "ToDoListApp warns"
-  ) => {
-    setConfirmConfig({
-      isOpen: true,
-      message,
-      title,
-      onConfirm: onConfirmCallback,
-    });
+  const showConfirm = (message: string, onConfirmCallback: () => void, title = "ToDoListApp warns") => {
+    setConfirmConfig({ isOpen: true, message, title, onConfirm: onConfirmCallback });
   };
 
   const handleConfirm = () => {
@@ -493,18 +473,13 @@ function App() {
     setConfirmConfig((prev) => ({ ...prev, isOpen: false }));
   };
 
-  // Filter and search tasks
-  const getFilteredAndSearchedTasks = () => {
+  const getFilteredAndSearchedTasks = (): Task[] => {
     let filtered = tasks.filter((task) => {
-      if (currentFilter === "active") {
-        return !task.completed;
-      } else if (currentFilter === "completed") {
-        return task.completed;
-      }
-      return true; // 'all' filter
+      if (currentFilter === "active") return !task.completed;
+      if (currentFilter === "completed") return task.completed;
+      return true;
     });
 
-    // Apply search filter
     if (searchQuery.trim() !== "") {
       filtered = filtered.filter((task) =>
         task.task.toLowerCase().includes(searchQuery.toLowerCase())
@@ -516,19 +491,16 @@ function App() {
 
   const filteredTasks = getFilteredAndSearchedTasks();
 
-  // Check if there are tasks for delete all button based on current filter
-  const getFilteredTasksCount = () => {
+  const getFilteredTasksCount = (): number => {
     if (currentFilter === "active") {
       return tasks.filter(task => !task.completed).length;
     } else if (currentFilter === "completed") {
       return tasks.filter(task => task.completed).length;
     }
-    return tasks.length; // 'all' filter
+    return tasks.length;
   };
 
   const hasTasks = getFilteredTasksCount() > 0;
-
-  // Calculate progress percentage
   const progressPercentage = tasks.length > 0 ? Math.round((taskCompleted / tasks.length) * 100) : 0;
 
   useEffect(() => {
@@ -541,21 +513,18 @@ function App() {
     setTaskCompleted(complete);
   }, [tasks]);
 
-  function setId() {
-    if (tasks.length === 0) {
-      return 1;
-    } else {
-      return Math.max(...tasks.map((task) => task.id)) + 1;
-    }
+  function setId(): number {
+    if (tasks.length === 0) return 1;
+    return Math.max(...tasks.map((task) => task.id)) + 1;
   }
 
-  function addTask(event) {
+  function addTask(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (newTask.current.value === "") {
+    if (!newTask.current || newTask.current.value === "") {
       showAlert("Please enter what you will do");
-      return false;
+      return;
     }
-    const data = {
+    const data: Task = {
       id: setId(),
       task: newTask.current.value,
       completed: false,
@@ -564,7 +533,7 @@ function App() {
     setTasks([data, ...tasks]);
   }
 
-  function setCompleted(id) {
+  function setCompleted(id: number) {
     const task = tasks.find((item) => item.id === id);
     
     if (task && task.completed) {
@@ -579,7 +548,7 @@ function App() {
     );
   }
 
-  function editTask(id, newTaskText) {
+  function editTask(id: number, newTaskText: string) {
     const task = tasks.find((item) => item.id === id);
     
     if (task && task.completed) {
@@ -594,33 +563,27 @@ function App() {
     );
   }
 
-  function move(taskId, direction) {
+  function move(taskId: number, direction: "up" | "down") {
     const currentIndex = tasks.findIndex((task) => task.id === taskId);
     const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
 
     if (newIndex < 0 || newIndex >= tasks.length) return;
 
     const newTasks = [...tasks];
-    [newTasks[currentIndex], newTasks[newIndex]] = [
-      newTasks[newIndex],
-      newTasks[currentIndex],
-    ];
-
+    [newTasks[currentIndex], newTasks[newIndex]] = [newTasks[newIndex], newTasks[currentIndex]];
     setTasks(newTasks);
   }
 
-  function remove(id) {
+  function remove(id: number) {
     showConfirm("Are you sure you want to delete this data?", () => {
       setTasks(tasks.filter((item) => item.id !== id));
     });
   }
 
-  // SMART DELETE ALL FUNCTION - Context aware based on current filter
   function deleteAll() {
     const activeTasks = tasks.filter(task => !task.completed);
     const completedTasks = tasks.filter(task => task.completed);
 
-    // Check if there are any tasks to delete based on current filter
     if (currentFilter === "active" && activeTasks.length === 0) {
       showAlert("There are no active tasks to delete");
       return;
@@ -636,56 +599,26 @@ function App() {
       return;
     }
 
-    // Generate confirmation message based on current filter
     let message = "";
-    let deleteAction = null;
+    let deleteAction: (() => void) | null = null;
 
     if (currentFilter === "active") {
       const count = activeTasks.length;
-      message = count === 1 
-        ? "Are you sure you want to delete 1 active task?" 
-        : `Are you sure you want to delete ${count} active tasks?`;
-      
-      deleteAction = () => {
-        // Keep only completed tasks
-        setTasks(completedTasks);
-      };
-    } 
-    else if (currentFilter === "completed") {
+      message = count === 1 ? "Are you sure you want to delete 1 active task?" : `Are you sure you want to delete ${count} active tasks?`;
+      deleteAction = () => setTasks(completedTasks);
+    } else if (currentFilter === "completed") {
       const count = completedTasks.length;
-      message = count === 1 
-        ? "Are you sure you want to delete 1 completed task?" 
-        : `Are you sure you want to delete ${count} completed tasks?`;
-      
-      deleteAction = () => {
-        // Keep only active tasks
-        setTasks(activeTasks);
-      };
-    } 
-    else { // "all" filter
+      message = count === 1 ? "Are you sure you want to delete 1 completed task?" : `Are you sure you want to delete ${count} completed tasks?`;
+      deleteAction = () => setTasks(activeTasks);
+    } else {
       const totalTasks = tasks.length;
-      const activeCount = activeTasks.length;
-      const completedCount = completedTasks.length;
-
-      if (activeCount > 0 && completedCount > 0) {
-        message = `Are you sure you want to delete all ${totalTasks} tasks (${activeCount} active + ${completedCount} completed)?`;
-      } else if (activeCount > 0) {
-        message = totalTasks === 1 
-          ? "Are you sure you want to delete 1 active task?" 
-          : `Are you sure you want to delete the active ${totalTasks} tasks?`;
-      } else {
-        message = totalTasks === 1 
-          ? "Are you sure you want to delete 1 completed task?" 
-          : `Are you sure you want to delete completed ${totalTasks} tasks?`;
-      }
-
-      deleteAction = () => {
-        // Delete ALL tasks
-        setTasks([]);
-      };
+      message = totalTasks === 1 ? "Are you sure you want to delete 1 task?" : `Are you sure you want to delete all ${totalTasks} tasks?`;
+      deleteAction = () => setTasks([]);
     }
 
-    showConfirm(message, deleteAction);
+    if (deleteAction) {
+      showConfirm(message, deleteAction);
+    }
   }
 
   return (

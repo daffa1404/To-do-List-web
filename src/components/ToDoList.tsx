@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { ToDoListProps, Task } from "../types";
 
-function ToDoList(props) {
-  const [editingId, setEditingId] = useState(null);
-  const [editValue, setEditValue] = useState("");
+function ToDoList(props: ToDoListProps): JSX.Element {
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editValue, setEditValue] = useState<string>("");
 
-  const startEditing = (id, currentTask) => {
+  const startEditing = (id: number, currentTask: string) => {
     setEditingId(id);
     setEditValue(currentTask);
   };
@@ -14,7 +15,7 @@ function ToDoList(props) {
     setEditValue("");
   };
 
-  const saveEdit = (id) => {
+  const saveEdit = (id: number) => {
     if (editValue.trim() === "") {
       props.showAlert("Task cannot be empty");
       return;
@@ -24,7 +25,7 @@ function ToDoList(props) {
     setEditValue("");
   };
 
-  const handleKeyPress = (e, id) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>, id: number) => {
     if (e.key === "Enter") {
       saveEdit(id);
     } else if (e.key === "Escape") {
@@ -32,8 +33,7 @@ function ToDoList(props) {
     }
   };
 
-  // Function untuk handle click pada completed task
-  const handleCompletedTaskClick = (item) => {
+  const handleCompletedTaskClick = (item: Task) => {
     if (item.completed) {
       props.showAlert("Tasks that have been completed cannot have their status changed again");
       return;
@@ -41,8 +41,7 @@ function ToDoList(props) {
     props.setCompleted(item.id);
   };
 
-  // Function untuk handle edit button pada completed task
-  const handleEditButtonClick = (item) => {
+  const handleEditButtonClick = (item: Task) => {
     if (item.completed) {
       props.showAlert("Completed tasks can no longer be edited");
       return;
@@ -50,12 +49,9 @@ function ToDoList(props) {
     startEditing(item.id, item.task);
   };
 
-  // Function untuk handle move button dengan logika yang benar
-  const handleMoveClick = (taskId, direction) => {
-    // Dapatkan index dari filtered tasks (current view)
+  const handleMoveClick = (taskId: number, direction: "up" | "down") => {
     const filteredIndex = props.tasks.findIndex((task) => task.id === taskId);
     
-    // Tentukan target task ID berdasarkan filtered view
     if (direction === "up" && filteredIndex > 0) {
       props.move(taskId, direction);
     } else if (direction === "down" && filteredIndex < props.tasks.length - 1) {
@@ -63,10 +59,8 @@ function ToDoList(props) {
     }
   };
 
-  // Function to get empty message based on current state
   const getEmptyMessage = () => {
     if (props.searchQuery && props.searchQuery.trim() !== "") {
-      // If there's a search query but no results
       if (props.currentFilter === "active") {
         return `No active tasks found for "${props.searchQuery}"`;
       } else if (props.currentFilter === "completed") {
@@ -75,7 +69,6 @@ function ToDoList(props) {
         return `No tasks found for "${props.searchQuery}"`;
       }
     } else {
-      // If no search query, show regular empty messages
       if (props.currentFilter === "active") {
         return "There are no active tasks";
       } else if (props.currentFilter === "completed") {
@@ -86,7 +79,6 @@ function ToDoList(props) {
     }
   };
 
-  // Jika No tasks available
   if (props.tasks.length === 0) {
     return (
       <div className="wrapper">
@@ -114,35 +106,19 @@ function ToDoList(props) {
             <div className="left">
               <button
                 onClick={() => handleCompletedTaskClick(item)}
-                aria-label={
-                  item.completed ? "Task completed permanently" : "Mark as complete"
-                }
+                aria-label={item.completed ? "Task completed permanently" : "Mark as complete"}
                 style={{ 
                   cursor: item.completed ? "not-allowed" : "pointer",
                   opacity: item.completed ? 0.8 : 1
                 }}
               >
                 {item.completed ? (
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#28a745"
-                    strokeWidth="2"
-                  >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#28a745" strokeWidth="2">
                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                     <polyline points="22,4 12,14.01 9,11.01" />
                   </svg>
                 ) : (
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#b0b0b0"
-                    strokeWidth="2"
-                  >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#b0b0b0" strokeWidth="2">
                     <circle cx="12" cy="12" r="10" />
                   </svg>
                 )}
@@ -163,18 +139,10 @@ function ToDoList(props) {
                     placeholder="Enter task name..."
                   />
                   <div className="edit-buttons">
-                    <button
-                      type="button"
-                      className="edit-btn save"
-                      onClick={() => saveEdit(item.id)}
-                    >
+                    <button type="button" className="edit-btn save" onClick={() => saveEdit(item.id)}>
                       Save
                     </button>
-                    <button
-                      type="button"
-                      className="edit-btn cancel"
-                      onClick={cancelEditing}
-                    >
+                    <button type="button" className="edit-btn cancel" onClick={cancelEditing}>
                       Cancel
                     </button>
                   </div>
@@ -187,57 +155,32 @@ function ToDoList(props) {
             <div className="right">
               {editingId !== item.id && (
                 <>
-                  {/* Move Up Button - berdasarkan filtered view */}
                   <span>
                     <button
                       type="button"
                       onClick={() => handleMoveClick(item.id, "up")}
-                      disabled={index === 0} // Disabled jika di posisi pertama dalam filtered view
-                      aria-label={
-                        index === 0 
-                          ? "Cannot move up (first item)" 
-                          : "Move task up"
-                      }
+                      disabled={index === 0}
+                      aria-label={index === 0 ? "Cannot move up (first item)" : "Move task up"}
                     >
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke={index === 0 ? "#666" : "#17a2b8"}
-                        strokeWidth="2"
-                      >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={index === 0 ? "#666" : "#17a2b8"} strokeWidth="2">
                         <polyline points="18,15 12,9 6,15" />
                       </svg>
                     </button>
                   </span>
 
-                  {/* Move Down Button - berdasarkan filtered view */}
                   <span>
                     <button
                       type="button"
                       onClick={() => handleMoveClick(item.id, "down")}
-                      disabled={index === props.tasks.length - 1} // Disabled jika di posisi terakhir dalam filtered view
-                      aria-label={
-                        index === props.tasks.length - 1
-                          ? "Cannot move down (last item)" 
-                          : "Move task down"
-                      }
+                      disabled={index === props.tasks.length - 1}
+                      aria-label={index === props.tasks.length - 1 ? "Cannot move down (last item)" : "Move task down"}
                     >
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke={index === props.tasks.length - 1 ? "#666" : "#17a2b8"}
-                        strokeWidth="2"
-                      >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={index === props.tasks.length - 1 ? "#666" : "#17a2b8"} strokeWidth="2">
                         <polyline points="6,9 12,15 18,9" />
                       </svg>
                     </button>
                   </span>
 
-                  {/* Edit Button */}
                   <span>
                     <button
                       type="button"
@@ -245,35 +188,16 @@ function ToDoList(props) {
                       aria-label={item.completed ? "Cannot edit completed task" : "Edit task"}
                       disabled={item.completed}
                     >
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke={item.completed ? "#666" : "#ffc107"}
-                        strokeWidth="2"
-                      >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={item.completed ? "#666" : "#ffc107"} strokeWidth="2">
                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                         <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                       </svg>
                     </button>
                   </span>
 
-                  {/* Delete Button */}
                   <span>
-                    <button
-                      type="button"
-                      onClick={() => props.remove(item.id)}
-                      aria-label="Delete task"
-                    >
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#dc3545"
-                        strokeWidth="2"
-                      >
+                    <button type="button" onClick={() => props.remove(item.id)} aria-label="Delete task">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc3545" strokeWidth="2">
                         <polyline points="3,6 5,6 21,6" />
                         <path d="m19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6" />
                         <line x1="10" y1="11" x2="10" y2="17" />

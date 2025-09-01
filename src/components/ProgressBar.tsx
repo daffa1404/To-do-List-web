@@ -1,4 +1,6 @@
-function ProgressBar({ completed, total, percentage }) {
+import { ProgressBarProps } from "../types";
+
+function ProgressBar({ completed, total, percentage }: ProgressBarProps): JSX.Element {
   return (
     <div className="progress-wrapper">
       <div className="progress-container">

@@ -1,30 +1,27 @@
-function Form(props) {
-  // Function untuk handle context menu (right-click) pada logo
-  const handleLogoContextMenu = (e) => {
+import { FormProps } from "../types";
+
+function Form(props: FormProps): JSX.Element {
+  const handleLogoContextMenu = (e: React.MouseEvent<HTMLImageElement>) => {
     e.preventDefault();
     return false;
   };
 
-  // Function untuk handle drag start pada logo
-  const handleLogoDragStart = (e) => {
+  const handleLogoDragStart = (e: React.DragEvent<HTMLImageElement>) => {
     e.preventDefault();
     return false;
   };
 
-  // Function untuk handle select start pada logo
-  const handleLogoSelectStart = (e) => {
+  const handleLogoSelectStart = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.preventDefault();
     return false;
   };
 
-  // Function untuk handle mouse down pada logo
-  const handleLogoMouseDown = (e) => {
+  const handleLogoMouseDown = (e: React.MouseEvent<HTMLImageElement>) => {
     e.preventDefault();
     return false;
   };
 
-  // Function untuk handle touch start pada mobile
-  const handleLogoTouchStart = (e) => {
+  const handleLogoTouchStart = (e: React.TouchEvent<HTMLImageElement>) => {
     e.preventDefault();
     return false;
   };
@@ -36,17 +33,11 @@ function Form(props) {
           src="/logotodolist.png"
           alt="TodoList App Logo"
           className="logo-image"
-          
-          // Desktop Protection Events
           onContextMenu={handleLogoContextMenu}
           onDragStart={handleLogoDragStart}
           onSelectStart={handleLogoSelectStart}
           onMouseDown={handleLogoMouseDown}
-          
-          // Mobile Protection Events
           onTouchStart={handleLogoTouchStart}
-          
-          // HTML Attributes
           draggable={false}
         />
         <div className="task-counter">
@@ -66,31 +57,24 @@ function Form(props) {
         <button type="submit">Add Task</button>
       </form>
 
-      {/* Filter Buttons */}
       <div className="filter-container">
         <button
           type="button"
-          className={`filter-btn ${
-            props.currentFilter === "all" ? "active" : ""
-          }`}
+          className={`filter-btn ${props.currentFilter === "all" ? "active" : ""}`}
           onClick={() => props.setCurrentFilter("all")}
         >
           All
         </button>
         <button
           type="button"
-          className={`filter-btn ${
-            props.currentFilter === "active" ? "active" : ""
-          }`}
+          className={`filter-btn ${props.currentFilter === "active" ? "active" : ""}`}
           onClick={() => props.setCurrentFilter("active")}
         >
           Active
         </button>
         <button
           type="button"
-          className={`filter-btn ${
-            props.currentFilter === "completed" ? "active" : ""
-          }`}
+          className={`filter-btn ${props.currentFilter === "completed" ? "active" : ""}`}
           onClick={() => props.setCurrentFilter("completed")}
         >
           Completed
